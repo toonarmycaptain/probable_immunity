@@ -1,0 +1,10 @@
+[run]
+
+include = /home/travis/build/toonarmycaptain/probable_immunity/*
+
+omit =
+     *.yml
+     *.md
+     tests/*
+     venv/*
+     probable_immunity_env/*
