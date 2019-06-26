@@ -24,7 +24,10 @@ class TestImmunity:
                              [  # 0 shots
                                  ((1957,), (0.0, messages['no_immunisations'])),
                                  ((1958,), (0.0, messages['no_immunisations'])),
-                                 ((2011, None), (0.0, messages['no_immunisations'])),
+                                 ((2011,), (0.0, messages['no_immunisations'])),
+                                 ((1957, 0), (0.0, messages['no_immunisations'])),
+                                 ((1958, 0), (0.0, messages['no_immunisations'])),
+                                 ((2011, 0), (0.0, messages['no_immunisations'])),
                                  # 1 shot
                                  ((1957, 1), (0.93, messages['has_immunisations'])),
                                  ((1958, 1), (0.93, messages['has_immunisations'])),
