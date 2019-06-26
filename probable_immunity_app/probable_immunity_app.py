@@ -35,20 +35,24 @@ def measles_immunity():  # prototype with measles, expand to multiple illnesses,
         if not birth_year:
             error = 'Birth year required.'
         elif not on_time_measles_vaccinations:
-            error = 'Number of measles immunisations before age six needed, if none, select "0"'
+            error = 'Number of measles immunisations before age six needed, if none, enter 0.'
         # Handle bad data.
         elif birth_year and on_time_measles_vaccinations:
+            error_str = ''  # Use str to allow concatenation
             try:
                 # Handle decimals by first converting str to int.
                 session['birth_year'] = int(float(birth_year))
             except ValueError:
-                error = 'Birth year must be a number.'
+                error_str = 'Birth year must be a number.\n'
 
             try:
                 # Handle decimals by first converting str to int (eg '2.0' -> 2. Rounds down.
                 session['on_time_measles_vaccinations'] = int(float(on_time_measles_vaccinations))
             except ValueError:
-                error = 'Number of vaccinations must be a number.'
+                error_str += 'Number of vaccinations must be a number.'
+
+            if error_str:
+                error = error_str
 
         if error is None:
             return redirect(url_for('immunity_app.measles_immunity_results'))
