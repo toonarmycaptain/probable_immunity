@@ -60,10 +60,8 @@ def measles_immunity():  # prototype with measles, expand to multiple illnesses,
 @immunity_app_bp.route('measles_immunity/results')
 def measles_immunity_results():
     if not isinstance(session['birth_year'], int):
-        print(type(session['birth_year']))
         raise ValueError
     if not isinstance(session['on_time_measles_vaccinations'], int):
-        print(type(session['on_time_measles_vaccinations']))
         raise ValueError
     probability_of_immunity, message = measles.immunity(session['birth_year'], session['on_time_measles_vaccinations'])
 
