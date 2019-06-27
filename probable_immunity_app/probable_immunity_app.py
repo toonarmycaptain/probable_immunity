@@ -16,11 +16,6 @@ app = Flask(__name__)
 # app.secret_key = os.urandom(32)
 
 
-@app.route('/hello')
-def hello_world():
-    return 'Hello World!'
-
-
 immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/immunity_app')
 
 
