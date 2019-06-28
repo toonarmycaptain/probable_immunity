@@ -56,13 +56,25 @@ def measles_immunity():  # prototype with measles, expand to multiple illnesses,
     return render_template('immunity_app/measles.html')
 
 
+measles_immunity_results_error_message = (
+    b'<html>'
+    b'<p>An error was encountered. Please try again.</p>'
+    b'<p>Please raise an <a href="https://github.com/toonarmycaptain/probable_immunity/issues">issue on Github.</p>'
+    b'</html>')
+
+
 @immunity_app_bp.route('measles_immunity/results')
 def measles_immunity_results():
-    if not isinstance(session['birth_year'], int):
-        raise ValueError
-    if not isinstance(session['on_time_measles_vaccinations'], int):
-        raise ValueError
-    probability_of_immunity, message = measles.immunity(session['birth_year'], session['on_time_measles_vaccinations'])
+    try:
+        if not isinstance(session['birth_year'], int):
+            raise ValueError
+        if not isinstance(session['on_time_measles_vaccinations'], int):
+            raise ValueError
+    except ValueError:
+        return measles_immunity_results_error_message
+
+    probability_of_immunity, message = measles.immunity(session['birth_year'],
+                                                        session['on_time_measles_vaccinations'])
 
     return render_template('immunity_app/measles_results.html',
                            probability_of_immunity=probability_of_immunity,

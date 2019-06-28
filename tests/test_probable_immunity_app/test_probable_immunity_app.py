@@ -61,3 +61,26 @@ def test_measles_immunity_results(client, app,
     assert response.status_code == response_status
     # Use probability of immunity to test response content.
     assert probability in response.data
+
+
+@pytest.mark.parametrize(
+    'request_data',
+    [  # 0 shots
+        ({'birth_year': 'a', 'on_time_measles_vaccinations': 0}),
+        ({'birth_year': 1957, 'on_time_measles_vaccinations': 'b'}),
+        ({'birth_year': 'c', 'on_time_measles_vaccinations': 'd'}),
+
+    ])
+def test_measles_immunity_results_raising_error(client, app,
+                                                request_data):
+    with app.test_client() as test_client:
+        assert test_client.get('immunity_app/measles_immunity').status_code == 200
+
+        # Fake out session data (ie in case a session is faked).
+        with test_client.session_transaction() as test_client_session:
+            test_client_session['birth_year'] = request_data['birth_year']
+            test_client_session['on_time_measles_vaccinations'] = request_data['on_time_measles_vaccinations']
+
+        response = test_client.get('http://localhost/immunity_app/measles_immunity/results', follow_redirects=True)
+
+        assert b'An error was encountered.' in response.data
