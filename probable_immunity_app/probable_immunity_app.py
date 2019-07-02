@@ -16,7 +16,7 @@ app = Flask(__name__)
 # app.secret_key = os.urandom(32)
 
 
-immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/immunity_app')
+immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 
 
 @immunity_app_bp.route('/measles_immunity', methods=('GET', 'POST'))
