@@ -1,4 +1,4 @@
-from probable_immunity_app import about_text_string, create_app
+from probable_immunity_web_app.app_factory import about_text_string, create_app
 
 
 def test_config():
