@@ -1,6 +1,6 @@
 import pytest
 
-from probable_immunity_app import create_app
+from probable_immunity_web_app.app_factory import create_app
 
 
 @pytest.fixture

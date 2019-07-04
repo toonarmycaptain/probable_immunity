@@ -1,3 +1,5 @@
+import os
+
 from pathlib import Path
 
 from flask import Flask
@@ -21,7 +23,7 @@ def create_app(test_config=None):
     # Create, configure app
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY=os.urandom(32),
         DATABASE=Path(Path(app.instance_path), 'probable_immunity_app.sqlite'),  # plan to use PostgreSQL
     )
 
