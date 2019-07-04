@@ -84,3 +84,28 @@ def test_measles_immunity_results_raising_error(client, app,
         response = test_client.get('http://localhost/measles_immunity/results', follow_redirects=True)
 
         assert b'An error was encountered.' in response.data
+
+
+def test_measles_immunity_results_without_valid_session_redirects(client, app):
+    with app.test_client() as test_client:
+        assert test_client.get('measles_immunity').status_code == 200
+        with test_client.session_transaction() as test_client_session:
+            with pytest.raises(KeyError):
+                assert test_client_session['birth_year']
+            with pytest.raises(KeyError):
+                assert test_client_session['on_time_measles_vaccinations']
+        response = test_client.get('measles_immunity/results', follow_redirects=False)
+        assert response.status_code == 302
+        assert response.headers['Location'] == 'http://localhost/measles_immunity'
+
+
+def test_measles_immunity_results_without_valid_session_redirects_to_data_entry(client, app):
+    with app.test_client() as test_client:
+        assert test_client.get('measles_immunity').status_code == 200
+        with test_client.session_transaction() as test_client_session:
+            with pytest.raises(KeyError):
+                assert test_client_session['birth_year']
+            with pytest.raises(KeyError):
+                assert test_client_session['on_time_measles_vaccinations']
+        response = test_client.get('measles_immunity/results', follow_redirects=True)
+        assert response.status_code == 200

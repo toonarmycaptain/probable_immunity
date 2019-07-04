@@ -72,6 +72,9 @@ def measles_immunity_results():
             raise ValueError
     except ValueError:
         return measles_immunity_results_error_message
+    # If no session/keys, return to data entry page.
+    except KeyError:
+        return redirect(url_for('immunity_app.measles_immunity'), code=302)
 
     probability_of_immunity, message = measles.immunity(session['birth_year'],
                                                         session['on_time_measles_vaccinations'])
