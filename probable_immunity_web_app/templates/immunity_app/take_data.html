@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Measles immunity{% endblock %}</h1>
+  <h1>{% block title %}Enter data{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
@@ -10,8 +10,10 @@
   <form method="post">
     <label for="birth_year">Year of birth: </label>
     <input name="birth_year" id="birth_year" type="number" required>
-    <label for="on_time_measles_vaccinations">Measles immunisations by age six</label>
-    <input name="on_time_measles_vaccinations" id="on_time_measles_vaccinations" type="number" required>
-    <input type="submit" value="Submit">
+    {% for illness in illnesses %}
+        {% set illness_template = 'immunity_app/' + illness + '_data_entry.html' %}
+        {% include illness_template ignore missing%}
+    {%  endfor %}
+
   </form>
 {% endblock %}
