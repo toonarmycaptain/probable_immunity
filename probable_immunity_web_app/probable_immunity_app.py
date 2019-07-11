@@ -44,7 +44,7 @@ def immunity():  # prototype with measles, expand to multiple illnesses, ie def 
 
             try:
                 # Handle decimals by first converting str to int (eg '2.0' -> 2. Rounds down.
-                session['on_time_measles_vaccinations'] = int(float(on_time_measles_vaccinations))
+                session['measles'] = {'on_time_measles_vaccinations': int(float(on_time_measles_vaccinations))}
             except ValueError:
                 error_str += 'Number of vaccinations must be a number.'
 
@@ -70,7 +70,7 @@ def immunity_results():
     try:
         if not isinstance(session['birth_year'], int):
             raise ValueError
-        if not isinstance(session['on_time_measles_vaccinations'], int):
+        if not isinstance(session['measles']['on_time_measles_vaccinations'], int):
             raise ValueError
     except ValueError:
         return immunity_results_error_message
@@ -80,7 +80,7 @@ def immunity_results():
 
     # Measles
     probability_of_measles_immunity, measles_message = measles.immunity(session['birth_year'],
-                                                                        session['on_time_measles_vaccinations'])
+                                                                        session['measles']['on_time_measles_vaccinations'])
 
     return render_template('immunity_app/immunity_results.html',
                            illnesses=illnesses,

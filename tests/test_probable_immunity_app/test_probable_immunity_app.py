@@ -1,3 +1,4 @@
+import flask
 import pytest
 
 
@@ -7,6 +8,8 @@ def test_immunity(client, app):
         'immunity', data={'birth_year': '2019',
                           'on_time_measles_vaccinations': '1'}
     )
+
+    assert response.status_code == 302  # Redirected to results page.
     assert 'http://localhost/immunity/results' == response.headers['Location']
 
 
@@ -64,22 +67,24 @@ def test_immunity_results(client, app,
 
 
 @pytest.mark.parametrize(
-    'request_data',
-    [  # 0 shots
-        ({'birth_year': 'a', 'on_time_measles_vaccinations': 0}),
+    'session_data',
+    [
+        ({'birth_year': 'a', 'on_time_measles_vaccinations': '0'}),
         ({'birth_year': 1957, 'on_time_measles_vaccinations': 'b'}),
         ({'birth_year': 'c', 'on_time_measles_vaccinations': 'd'}),
-
+        # Ensure good session data does not raise error.
+        pytest.param({'birth_year': 1980, 'on_time_measles_vaccinations': 2}, marks=pytest.mark.xfail),
     ])
 def test_immunity_results_raising_error(client, app,
-                                        request_data):
+                                        session_data):
     with app.test_client() as test_client:
         assert test_client.get('immunity').status_code == 200
 
         # Fake out session data (ie in case a session is faked).
         with test_client.session_transaction() as test_client_session:
-            test_client_session['birth_year'] = request_data['birth_year']
-            test_client_session['on_time_measles_vaccinations'] = request_data['on_time_measles_vaccinations']
+            test_client_session['birth_year'] = session_data['birth_year']
+            test_client_session['measles'] = {
+                'on_time_measles_vaccinations': session_data['on_time_measles_vaccinations']}
 
         response = test_client.get('http://localhost/immunity/results', follow_redirects=True)
 
@@ -93,7 +98,7 @@ def test_immunity_results_without_valid_session_redirects(client, app):
             with pytest.raises(KeyError):
                 assert test_client_session['birth_year']
             with pytest.raises(KeyError):
-                assert test_client_session['on_time_measles_vaccinations']
+                assert test_client_session['measles']['on_time_measles_vaccinations']
         response = test_client.get('immunity/results', follow_redirects=False)
         assert response.status_code == 302
         assert response.headers['Location'] == 'http://localhost/immunity'
@@ -106,6 +111,6 @@ def test_immunity_results_without_valid_session_redirects_to_data_entry(client, 
             with pytest.raises(KeyError):
                 assert test_client_session['birth_year']
             with pytest.raises(KeyError):
-                assert test_client_session['on_time_measles_vaccinations']
+                assert test_client_session['measles']['on_time_measles_vaccinations']
         response = test_client.get('immunity/results', follow_redirects=True)
         assert response.status_code == 200
