@@ -33,6 +33,40 @@ def test_immunity_validate_input(client, app,
 
 
 @pytest.mark.parametrize(
+    'request_data',
+    [  # 0 shots
+        ({'birth_year': '1956', 'on_time_measles_vaccinations': '0'}),
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '0'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '0'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '0'}),
+        # 1 shot
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '1'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '1'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '1'}),
+        # 2 shots
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '2'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '2'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '2'}),
+        # >2 shots
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '3'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '7'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '12'}),
+    ])
+def test_immunity_session_contents(client, app,
+                                   request_data):
+    with app.test_client() as test_client:
+        assert test_client.get('immunity').status_code == 200
+        response = test_client.post(
+            'immunity', data=request_data)
+        assert flask.session['birth_year'] == int(request_data['birth_year'])
+        assert flask.session['measles'] == {
+            'on_time_measles_vaccinations': int(request_data['on_time_measles_vaccinations'])}
+
+        # Ensure successful redirect to results in response.
+        assert 'http://localhost/immunity/results' == response.headers['Location']
+
+
+@pytest.mark.parametrize(
     'request_data, response_status, probability',
     [  # 0 shots
         ({'birth_year': '1956', 'on_time_measles_vaccinations': '0'}, 200, b'1.0'),
