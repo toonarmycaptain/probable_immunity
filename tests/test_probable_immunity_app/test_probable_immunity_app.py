@@ -125,7 +125,7 @@ def test_immunity_results_raising_error(client, app,
         assert b'An error was encountered.' in response.data
 
 
-def test_immunity_results_without_valid_session_redirects(client, app):
+def test_immunity_results_without_session_data_redirects(client, app):
     with app.test_client() as test_client:
         assert test_client.get('immunity').status_code == 200
         with test_client.session_transaction() as test_client_session:
