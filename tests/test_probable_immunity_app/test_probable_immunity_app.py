@@ -103,9 +103,9 @@ def test_immunity_results(client, app,
 @pytest.mark.parametrize(
     'session_data',
     [
-        ({'birth_year': 'a', 'on_time_measles_vaccinations': '0'}),
-        ({'birth_year': 1957, 'on_time_measles_vaccinations': 'b'}),
-        ({'birth_year': 'c', 'on_time_measles_vaccinations': 'd'}),
+        ({'birth_year': 'a', 'on_time_measles_vaccinations': 0}),  # String birth_year.
+        ({'birth_year': 1957, 'on_time_measles_vaccinations': 'b'}),  # String on_time_measles_vaccinations.
+        ({'birth_year': 'c', 'on_time_measles_vaccinations': 'd'}),  # String for all values.
         # Ensure good session data does not raise error.
         pytest.param({'birth_year': 1980, 'on_time_measles_vaccinations': 2}, marks=pytest.mark.xfail),
     ])
