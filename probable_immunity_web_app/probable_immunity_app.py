@@ -21,7 +21,7 @@ immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 illnesses = ['measles']
 
 
-@immunity_app_bp.route('/immunity', methods=('GET', 'POST'))
+@immunity_app_bp.route('/immunity/', methods=('GET', 'POST'))
 def immunity():  # prototype with measles, expand to multiple illnesses, ie def immunities()
     if request.method == 'POST':
         birth_year = request.form['birth_year']
@@ -65,7 +65,7 @@ immunity_results_error_message = (
     b'</html>')
 
 
-@immunity_app_bp.route('immunity/results')
+@immunity_app_bp.route('immunity/results/')
 def immunity_results():
     try:
         if not isinstance(session['birth_year'], int):
