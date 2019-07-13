@@ -9,7 +9,11 @@
 
   <form method="post">
     <label for="birth_year">Year of birth: </label>
-    <input name="birth_year" id="birth_year" type="number" required>
+    <input name="birth_year" id="birth_year" title="Enter a 4 digit year."
+           type="number"
+           oninvalid="this.setCustomValidity('Please enter a four digit year.')"
+           oninput="this.setCustomValidity('')"
+           required>
     {% for illness in illnesses %}
         {% set illness_template = 'immunity_app/' + illness + '_data_entry.html' %}
         {% include illness_template ignore missing%}
