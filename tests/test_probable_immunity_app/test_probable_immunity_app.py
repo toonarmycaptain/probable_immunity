@@ -14,10 +14,9 @@ def test_immunity(client, app):
 
 
 def test_immunity_without_trailing_forward_slash_redirects(client, app):
-    response =  client.get('immunity')
+    response = client.get('immunity')
     assert response.status_code == 308
     assert response.headers['Location'] == 'http://localhost/immunity/'
-
 
 
 @pytest.mark.parametrize(
@@ -143,6 +142,7 @@ def test_immunity_results_without_session_data_redirects(client, app):
         response = test_client.get('immunity/results/', follow_redirects=False)
         assert response.status_code == 302
         assert response.headers['Location'] == 'http://localhost/immunity/'
+
 
 def test_immunity_results_without_trailing_forward_slash_redirects(client, app):
     response = client.get('immunity/results')
