@@ -76,7 +76,7 @@ def immunity_results():
         return immunity_results_error_message
     # If no session/keys, return to data entry page.
     except KeyError:
-        return redirect(url_for('immunity_app.immunity'), code=302)
+        return redirect(url_for('immunity_app.immunity/'), code=302)
 
     # Measles
     probability_of_measles_immunity, measles_message = measles.immunity(session['birth_year'],
