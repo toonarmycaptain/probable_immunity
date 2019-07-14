@@ -12,17 +12,17 @@ from flask import (Blueprint,
 
 app = Flask(__name__)
 
-
 # app.secret_key = os.urandom(32)
 
 
 immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 
-illnesses = ['measles']
+illnesses = {'measles': {'immunity': measles.immunity}
+             }
 
 
 @immunity_app_bp.route('/immunity/', methods=('GET', 'POST'))
-def immunity():  # prototype with measles, expand to multiple illnesses, ie def immunities()
+def immunity():
     if request.method == 'POST':
         birth_year = request.form['birth_year']
         on_time_measles_vaccinations = request.form['on_time_measles_vaccinations']
@@ -65,28 +65,23 @@ immunity_results_error_message = (
     b'</html>')
 
 
-@immunity_app_bp.route('immunity/results/')
+@immunity_app_bp.route('/immunity/results/')
 def immunity_results():
-    try:
-        if not isinstance(session['birth_year'], int):
-            raise ValueError
-        if not isinstance(session['measles']['on_time_measles_vaccinations'], int):
-            raise ValueError
-    except ValueError:
-        return immunity_results_error_message
-    # If no session/keys, return to data entry page.
-    except KeyError:
-        return redirect(url_for('immunity_app.immunity/'), code=302)
-
-    # Measles
-    probability_of_measles_immunity, measles_message = measles.immunity(session['birth_year'],
-                                                                        session['measles']['on_time_measles_vaccinations'])
-
-    return render_template('immunity_app/immunity_results.html',
-                           illnesses=illnesses,
-                           probability_of_measles_immunity=probability_of_measles_immunity,
-                           measles_message=measles_message,
-                           )
+    for illness in illnesses:
+        result_data = {}
+        try:
+            result_data[illness] = {**illnesses[illness]['immunity'](birth_year=session['birth_year'],
+                                                                     **session[illness])
+                                    }
+        except (ValueError, TypeError):  # -> raise this in immunity() pass on TypeError also.
+            result_data[illness] = {f'probability_of_{illness}_immunity': 'Unknown.',
+                                    f'{illness}_message': immunity_results_error_message}
+        except KeyError:
+            return redirect(url_for('immunity_app.immunity'), code=302)
+        return render_template('immunity_app/immunity_results.html',
+                               illnesses=illnesses,
+                               **result_data,  # then use dict of form {illness: (whatever key-value each illness needs}
+                               )
 
 
 if __name__ == '__main__':
