@@ -11,7 +11,7 @@ presumed to be protected against measles, mumps, and rubella. Healthcare
 personnel born before 1957 without laboratory evidence of immunity or disease
 should consider getting two doses of MMR vaccine." - https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 """
-from typing import Optional, Dict
+from typing import Dict
 
 rec_shots_under_6 = 2
 
@@ -53,13 +53,15 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
     :param on_time_measles_vaccinations: int or None
     :return: Dict {'probability_of_measles_immunity': float, 'measles_message': str}
     """
+    # Set defaults:
+    probability, message = 0.0, messages['no_immunisations']
     if birth_year < 1957:
-        return {'probability_of_measles_immunity': 1.0, 'measles_message': messages['pre_1957_message']}
-    if on_time_measles_vaccinations:
+        probability, message = 1.0, messages['pre_1957_message']
+    elif on_time_measles_vaccinations:
         if on_time_measles_vaccinations <= 2:
-            return {'probability_of_measles_immunity': shots_under_6_immunity[on_time_measles_vaccinations], 'measles_message': messages['has_immunisations']}
+            probability, message = shots_under_6_immunity[on_time_measles_vaccinations], messages['has_immunisations']
         if on_time_measles_vaccinations > 2:
-            return {'probability_of_measles_immunity': shots_under_6_immunity[2], 'measles_message': messages['greater_than_two_shots_before_age_six_message']}
-    return {'probability_of_measles_immunity': 0.0, 'measles_message': messages['no_immunisations']}
+            probability, message = shots_under_6_immunity[2], messages['greater_than_two_shots_before_age_six_message']
+    return {'probability_of_measles_immunity': probability, 'measles_message': message}
 
 # need case where shots after age 6
