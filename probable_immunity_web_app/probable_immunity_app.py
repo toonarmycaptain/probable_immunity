@@ -1,5 +1,3 @@
-from illnesses import measles
-
 from flask import (Blueprint,
                    flash,
                    Flask,
@@ -10,15 +8,14 @@ from flask import (Blueprint,
                    url_for,
                    )
 
+from probable_immunity_web_app.illness_config import illnesses
+
 app = Flask(__name__)
 
 # app.secret_key = os.urandom(32)
 
 
 immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
-
-illnesses = {'measles': {'immunity': measles.immunity}
-             }
 
 
 @immunity_app_bp.route('/immunity/', methods=('GET', 'POST'))
