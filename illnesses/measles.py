@@ -1,3 +1,4 @@
+from flask import Markup
 """
 CDC Presumptive evidence of immunity: https://www.cdc.gov/vaccines/pubs/surv-manual/chpt07-measles.html
 
@@ -18,7 +19,8 @@ rec_shots_under_6 = 2
 conferred_immunity = 1
 
 messages = {'pre_1957_message': ("According to the CDC, you are likely immune to measles due to "
-                                 "childhood exposure.\n\"Birth before 1957 provides only "
+                                 "childhood exposure.<br>"
+                                 "\"Birth before 1957 provides only "
                                  "presumptive evidence for measles, mumps, and rubella. Before "
                                  "vaccines were available, nearly everyone was infected with "
                                  "measles, mumps, and rubella viruses during childhood. The "
@@ -27,7 +29,8 @@ messages = {'pre_1957_message': ("According to the CDC, you are likely immune to
                                  "against measles, mumps, and rubella. Healthcare personnel born "
                                  "before 1957 without laboratory evidence of immunity or disease "
                                  "should consider getting two doses of MMR vaccine.\" "
-                                 "- https://www.cdc.gov/vaccines/vpd/mmr/public/index.html"),
+                                 "- <a href='https://www.cdc.gov/vaccines/vpd/mmr/public/index.html'>"
+                                 "CDC - Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know</a>"),
             'has_immunisations': ("This means you have a statistical probability of being immune "
                                   "to measles if you are exposed. The closer to 1.0, the more "
                                   "likely you are immune."),  # TODO make better message
@@ -62,6 +65,6 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
             probability, message = shots_under_6_immunity[on_time_measles_vaccinations], messages['has_immunisations']
         if on_time_measles_vaccinations > 2:
             probability, message = shots_under_6_immunity[2], messages['greater_than_two_shots_before_age_six_message']
-    return {'probability_of_measles_immunity': probability, 'measles_message': message}
+    return {'probability_of_measles_immunity': probability, 'measles_message': Markup(message)}
 
 # need case where shots after age 6
