@@ -1,3 +1,5 @@
+from typing import Dict
+
 from flask import Markup
 """
 CDC Presumptive evidence of immunity: https://www.cdc.gov/vaccines/pubs/surv-manual/chpt07-measles.html
@@ -12,7 +14,6 @@ presumed to be protected against measles, mumps, and rubella. Healthcare
 personnel born before 1957 without laboratory evidence of immunity or disease
 should consider getting two doses of MMR vaccine." - https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 """
-from typing import Dict
 
 rec_shots_under_6 = 2
 
