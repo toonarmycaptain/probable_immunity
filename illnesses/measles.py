@@ -20,7 +20,7 @@ conferred_immunity = 1
 
 messages = {'pre_1957_message': ("According to the CDC, you are likely immune to measles due to "
                                  "childhood exposure.<br>"
-                                 "\"Birth before 1957 provides only "
+                                 "NB: \"Birth before 1957 provides only "
                                  "presumptive evidence for measles, mumps, and rubella. Before "
                                  "vaccines were available, nearly everyone was infected with "
                                  "measles, mumps, and rubella viruses during childhood. The "
