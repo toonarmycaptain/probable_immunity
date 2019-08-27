@@ -5,7 +5,6 @@ from flask import Markup
 CDC Presumptive evidence of immunity: https://www.cdc.gov/vaccines/pubs/surv-manual/chpt07-measles.html
 
 
-
 "Birth before 1957 provides only presumptive evidence for measles, mumps, and
 rubella. Before vaccines were available, nearly everyone was infected with
 measles, mumps, and rubella viruses during childhood. The majority of people
@@ -13,6 +12,21 @@ born before 1957 are likely to have been infected naturally and therefore are
 presumed to be protected against measles, mumps, and rubella. Healthcare
 personnel born before 1957 without laboratory evidence of immunity or disease
 should consider getting two doses of MMR vaccine." - https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
+
+
+"Measles is a highly contagious virus that lives in the nose and throat mucus 
+of an infected person. It can spread to others through coughing and sneezing. 
+Also, measles virus can live for up to two hours in an airspace where the 
+infected person coughed or sneezed.
+
+If other people breathe the contaminated air or touch the infected surface, 
+then touch their eyes, noses, or mouths, they can become infected. Measles is 
+so contagious that if one person has it, up to 90% of the people close to 
+that person who are not immune will also become infected.
+
+Infected people can spread measles to others from four days before through 
+four days after the rash appears."
+https://www.cdc.gov/measles/transmission.html
 """
 
 rec_shots_under_6 = 2
