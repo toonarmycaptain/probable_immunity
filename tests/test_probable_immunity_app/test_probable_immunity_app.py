@@ -10,7 +10,7 @@ def test_immunity(client, app):
     )
 
     assert response.status_code == 302  # Redirected to results page.
-    assert 'http://localhost/immunity/results/' == response.headers['Location']
+    assert response.headers['Location'] == 'http://localhost/immunity/results/'
 
 
 def test_immunity_without_trailing_forward_slash_redirects(client, app):
