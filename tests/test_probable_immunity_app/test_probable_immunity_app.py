@@ -1,13 +1,22 @@
+import flask
 import pytest
 
 
-def test_measles_immunity(client, app):
-    assert client.get('measles_immunity').status_code == 200
+def test_immunity(client, app):
+    assert client.get('immunity/').status_code == 200
     response = client.post(
-        'measles_immunity', data={'birth_year': '2019',
-                                  'on_time_measles_vaccinations': '1'}
+        'immunity/', data={'birth_year': '2019',
+                           'on_time_measles_vaccinations': '1'}
     )
-    assert 'http://localhost/measles_immunity/results' == response.headers['Location']
+
+    assert response.status_code == 302  # Redirected to results page.
+    assert 'http://localhost/immunity/results/' == response.headers['Location']
+
+
+def test_immunity_without_trailing_forward_slash_redirects(client, app):
+    response = client.get('immunity')
+    assert response.status_code == 308
+    assert response.headers['Location'] == 'http://localhost/immunity/'
 
 
 @pytest.mark.parametrize(
@@ -19,14 +28,48 @@ def test_measles_immunity(client, app):
      ('test text entry for both', 'and both errors flashed',
       b'Birth year must be a number.\nNumber of vaccinations must be a number.')
      ])
-def test_measles_immunity_validate_input(client, app,
-                                         birth_year, on_time_measles_vaccinations,
-                                         message):
+def test_immunity_validate_input(client, app,
+                                 birth_year, on_time_measles_vaccinations,
+                                 message):
     response = client.post(
-        '/measles_immunity',
+        '/immunity/',
         data={'birth_year': birth_year, 'on_time_measles_vaccinations': on_time_measles_vaccinations}
     )
     assert message in response.data
+
+
+@pytest.mark.parametrize(
+    'request_data',
+    [  # 0 shots
+        ({'birth_year': '1956', 'on_time_measles_vaccinations': '0'}),
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '0'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '0'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '0'}),
+        # 1 shot
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '1'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '1'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '1'}),
+        # 2 shots
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '2'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '2'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '2'}),
+        # >2 shots
+        ({'birth_year': '1957', 'on_time_measles_vaccinations': '3'}),
+        ({'birth_year': '1958', 'on_time_measles_vaccinations': '7'}),
+        ({'birth_year': '2011', 'on_time_measles_vaccinations': '12'}),
+    ])
+def test_immunity_session_contents(client, app,
+                                   request_data):
+    with app.test_client() as test_client:
+        assert test_client.get('immunity/').status_code == 200
+        response = test_client.post(
+            'immunity/', data=request_data)
+        assert flask.session['birth_year'] == int(request_data['birth_year'])
+        assert flask.session['measles'] == {
+            'on_time_measles_vaccinations': int(request_data['on_time_measles_vaccinations'])}
+
+        # Ensure successful redirect to results in response.
+        assert 'http://localhost/immunity/results/' == response.headers['Location']
 
 
 @pytest.mark.parametrize(
@@ -49,63 +92,71 @@ def test_measles_immunity_validate_input(client, app,
         ({'birth_year': '1958', 'on_time_measles_vaccinations': '7'}, 200, b'0.97'),
         ({'birth_year': '2011', 'on_time_measles_vaccinations': '12'}, 200, b'0.97'),
     ])
-def test_measles_immunity_results(client, app,
-                                  request_data,
-                                  response_status, probability):
-    assert client.get('measles_immunity').status_code == 200
+def test_immunity_results(client, app,
+                          request_data,
+                          response_status, probability):
+    assert client.get('immunity/').status_code == 200
     response = client.post(
-        'measles_immunity', data=request_data)
-    assert 'http://localhost/measles_immunity/results' == response.headers['Location']
+        'immunity/', data=request_data)
+    assert 'http://localhost/immunity/results/' == response.headers['Location']
 
-    response = client.get('http://localhost/measles_immunity/results', follow_redirects=True)
+    response = client.get('http://localhost/immunity/results/', follow_redirects=True)
     assert response.status_code == response_status
     # Use probability of immunity to test response content.
     assert probability in response.data
 
 
 @pytest.mark.parametrize(
-    'request_data',
-    [  # 0 shots
-        ({'birth_year': 'a', 'on_time_measles_vaccinations': 0}),
-        ({'birth_year': 1957, 'on_time_measles_vaccinations': 'b'}),
-        ({'birth_year': 'c', 'on_time_measles_vaccinations': 'd'}),
-
+    'session_data',
+    [
+        ({'birth_year': 'a', 'on_time_measles_vaccinations': 0}),  # String birth_year.
+        ({'birth_year': 1957, 'on_time_measles_vaccinations': 'b'}),  # String on_time_measles_vaccinations.
+        ({'birth_year': 'c', 'on_time_measles_vaccinations': 'd'}),  # String for all values.
+        # Ensure good session data does not raise error.
+        pytest.param({'birth_year': 1980, 'on_time_measles_vaccinations': 2}, marks=pytest.mark.xfail),
     ])
-def test_measles_immunity_results_raising_error(client, app,
-                                                request_data):
+def test_immunity_results_raising_error(client, app,
+                                        session_data):
     with app.test_client() as test_client:
-        assert test_client.get('measles_immunity').status_code == 200
+        assert test_client.get('immunity/').status_code == 200
 
         # Fake out session data (ie in case a session is faked).
         with test_client.session_transaction() as test_client_session:
-            test_client_session['birth_year'] = request_data['birth_year']
-            test_client_session['on_time_measles_vaccinations'] = request_data['on_time_measles_vaccinations']
+            test_client_session['birth_year'] = session_data['birth_year']
+            test_client_session['measles'] = {
+                'on_time_measles_vaccinations': session_data['on_time_measles_vaccinations']}
 
-        response = test_client.get('http://localhost/measles_immunity/results', follow_redirects=True)
+        response = test_client.get('http://localhost/immunity/results/', follow_redirects=True)
 
         assert b'An error was encountered.' in response.data
 
 
-def test_measles_immunity_results_without_valid_session_redirects(client, app):
+def test_immunity_results_without_session_data_redirects(client, app):
     with app.test_client() as test_client:
-        assert test_client.get('measles_immunity').status_code == 200
+        assert test_client.get('immunity/').status_code == 200
         with test_client.session_transaction() as test_client_session:
             with pytest.raises(KeyError):
                 assert test_client_session['birth_year']
             with pytest.raises(KeyError):
-                assert test_client_session['on_time_measles_vaccinations']
-        response = test_client.get('measles_immunity/results', follow_redirects=False)
+                assert test_client_session['measles']['on_time_measles_vaccinations']
+        response = test_client.get('immunity/results/', follow_redirects=False)
         assert response.status_code == 302
-        assert response.headers['Location'] == 'http://localhost/measles_immunity'
+        assert response.headers['Location'] == 'http://localhost/immunity/'
 
 
-def test_measles_immunity_results_without_valid_session_redirects_to_data_entry(client, app):
+def test_immunity_results_without_trailing_forward_slash_redirects(client, app):
+    response = client.get('immunity/results')
+    assert response.status_code == 308
+    assert response.headers['Location'] == 'http://localhost/immunity/results/'
+
+
+def test_immunity_results_without_valid_session_redirects_to_data_entry(client, app):
     with app.test_client() as test_client:
-        assert test_client.get('measles_immunity').status_code == 200
+        assert test_client.get('immunity/').status_code == 200
         with test_client.session_transaction() as test_client_session:
             with pytest.raises(KeyError):
                 assert test_client_session['birth_year']
             with pytest.raises(KeyError):
-                assert test_client_session['on_time_measles_vaccinations']
-        response = test_client.get('measles_immunity/results', follow_redirects=True)
+                assert test_client_session['measles']['on_time_measles_vaccinations']
+        response = test_client.get('immunity/results/', follow_redirects=True)
         assert response.status_code == 200

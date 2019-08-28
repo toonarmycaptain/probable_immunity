@@ -13,8 +13,12 @@ def test_config():
 
 
 def test_about_text(client):
-    response = client.get('/about_text')
+    response = client.get('/about_text/')
     assert response.data == about_text_string
+
+def test_redirects(client, app):
+    response = client.get('about_text')
+    assert response.status_code == 308
 
 
 def test_create_app():

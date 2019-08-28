@@ -12,15 +12,17 @@ from flask import (Blueprint,
 
 app = Flask(__name__)
 
-
 # app.secret_key = os.urandom(32)
 
 
 immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 
+illnesses = {'measles': {'immunity': measles.immunity}
+             }
 
-@immunity_app_bp.route('/measles_immunity', methods=('GET', 'POST'))
-def measles_immunity():  # prototype with measles, expand to multiple illnesses, ie def immunities()
+
+@immunity_app_bp.route('/immunity/', methods=('GET', 'POST'))
+def immunity():
     if request.method == 'POST':
         birth_year = request.form['birth_year']
         on_time_measles_vaccinations = request.form['on_time_measles_vaccinations']
@@ -42,7 +44,7 @@ def measles_immunity():  # prototype with measles, expand to multiple illnesses,
 
             try:
                 # Handle decimals by first converting str to int (eg '2.0' -> 2. Rounds down.
-                session['on_time_measles_vaccinations'] = int(float(on_time_measles_vaccinations))
+                session['measles'] = {'on_time_measles_vaccinations': int(float(on_time_measles_vaccinations))}
             except ValueError:
                 error_str += 'Number of vaccinations must be a number.'
 
@@ -50,39 +52,36 @@ def measles_immunity():  # prototype with measles, expand to multiple illnesses,
                 error = error_str
 
         if error is None:
-            return redirect(url_for('immunity_app.measles_immunity_results'))
+            return redirect(url_for('immunity_app.immunity_results'))
         flash(error)
 
-    return render_template('immunity_app/measles.html')
+    return render_template('immunity_app/take_data.html', illnesses=illnesses)
 
 
-measles_immunity_results_error_message = (
+immunity_results_error_message = (
     b'<html>'
     b'<p>An error was encountered. Please try again.</p>'
     b'<p>Please raise an <a href="https://github.com/toonarmycaptain/probable_immunity/issues">issue on Github.</p>'
     b'</html>')
 
 
-@immunity_app_bp.route('measles_immunity/results')
-def measles_immunity_results():
-    try:
-        if not isinstance(session['birth_year'], int):
-            raise ValueError
-        if not isinstance(session['on_time_measles_vaccinations'], int):
-            raise ValueError
-    except ValueError:
-        return measles_immunity_results_error_message
-    # If no session/keys, return to data entry page.
-    except KeyError:
-        return redirect(url_for('immunity_app.measles_immunity'), code=302)
-
-    probability_of_immunity, message = measles.immunity(session['birth_year'],
-                                                        session['on_time_measles_vaccinations'])
-
-    return render_template('immunity_app/measles_results.html',
-                           probability_of_immunity=probability_of_immunity,
-                           message=message,
-                           )
+@immunity_app_bp.route('/immunity/results/')
+def immunity_results():
+    for illness in illnesses:
+        result_data = {}
+        try:
+            result_data[illness] = {**illnesses[illness]['immunity'](birth_year=session['birth_year'],
+                                                                     **session[illness])
+                                    }
+        except (ValueError, TypeError):  # -> raise this in immunity() pass on TypeError also.
+            result_data[illness] = {f'probability_of_{illness}_immunity': 'Unknown.',
+                                    f'{illness}_message': immunity_results_error_message}
+        except KeyError:
+            return redirect(url_for('immunity_app.immunity'), code=302)
+        return render_template('immunity_app/immunity_results.html',
+                               illnesses=illnesses,
+                               **result_data,  # then use dict of form {illness: (whatever key-value each illness needs}
+                               )
 
 
 if __name__ == '__main__':

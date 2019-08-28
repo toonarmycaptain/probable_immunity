@@ -42,7 +42,7 @@ def create_app(test_config=None):
     from . import probable_immunity_app
     app.register_blueprint(probable_immunity_app.immunity_app_bp)
 
-    @app.route('/about_text')
+    @app.route('/about_text/')
     def about_text():
         return about_text_string
 
