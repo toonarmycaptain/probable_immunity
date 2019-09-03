@@ -20,7 +20,7 @@ class TestImmunity:
     def test_immunity_pre_1957(self, args, returned_dict):
         assert immunity(*args) == returned_dict
 
-    {'probability_of_measles_immunity': 0.0, 'measles_message': messages['no_immunisations']}
+
     @pytest.mark.parametrize('args, returned_dict',
                              [  # 0 shots
                                  ((1957,), {'probability_of_measles_immunity': 0.0, 'measles_message': messages['no_immunisations']}),
