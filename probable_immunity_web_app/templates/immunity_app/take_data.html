@@ -15,7 +15,9 @@
            oninput="this.setCustomValidity('')"
            required>
     {% for illness in illnesses %}
-        {% set illness_template = 'immunity_app/' + illness + '_data_entry.html' %}
+        {% set illness_template = 'immunity_app/'
+                                 + illness + '/'
+                                 + illness + '_data_entry.html' %}
         {% include illness_template ignore missing%}
     {%  endfor %}
 
