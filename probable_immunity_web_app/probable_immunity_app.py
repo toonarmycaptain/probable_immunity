@@ -55,13 +55,6 @@ def immunity():
     return render_template('immunity_app/take_data.html', illnesses=illnesses)
 
 
-immunity_results_error_message = (
-    b'<html>'
-    b'<p>An error was encountered. Please try again.</p>'
-    b'<p>Please raise an <a href="https://github.com/toonarmycaptain/probable_immunity/issues">issue on Github.</a></p>'
-    b'</html>')
-
-
 @immunity_app_bp.route('/immunity/results/')
 def immunity_results():
     for illness in illnesses:
