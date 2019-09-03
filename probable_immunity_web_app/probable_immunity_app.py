@@ -64,7 +64,7 @@ def immunity_results():
                                                                      **session[illness])
                                     }
         except (ValueError, TypeError):  # -> raise this in immunity() pass on TypeError also.
-            result_data[illness] = {f'probability_of_{illness}_immunity': 'Unknown.',
+            result_data[illness] = {f'probability_of_{illness}_immunity': 'Unknown',
                                     'content_templates': ['immunity_results_error_message']}
         except KeyError:
             return redirect(url_for('immunity_app.immunity'), code=302)
@@ -76,3 +76,99 @@ def immunity_results():
 
 if __name__ == '__main__':
     app.run()
+
+
+
+"""
+have session[illness] = {'data key': data}
+so each illness' data_dict is under it's own key in the session dict. 
+
+
+def multi_immunity_results():
+    # the alternative to this would be to abstract each illness separately, but
+    # since this will probable all have a probability and a message, it might
+    # be easier to use a * expansion, or simply
+    # probability, message = immunity()
+
+
+    for illness in illnesses:
+        try:
+            result_data[illness] = {**illness[immunity]()}
+        except (ValueError, TypeError):  #-> raise this in immunity() pass on TypeError also.
+            result_data[illness] = illnesses[illness]['error message']
+        except KeyError:
+            return redirect(url_for('immunity_app/immunity'), code=302)
+        return render_template('immunity_app/immunity_results.html',
+                               illnesses=illnesses,
+                               **result_data, # then use dict of form {illness: (whatever key-value each illness needs}
+                               )
+                                # the alternative result_data = {**illness[immunity]() would require non duplicate keys
+                                # from each illness - eg returning measles_probability_of_immunity rather than immunity_probability
+                                # and probably be more error prone. result_data['birth_year'] can still be a key.
+                                # It might be advisable/possible to make this dict a class with validation, but this might not wash with passing it to a jinja template.
+# We can test the individual illness/templates by mocking illnesses in probable_immunity_app.py
+
+Better to use wtf forms in the immunity/take_data view, and use error handling in the various illness.immunity functions
+to handle Value/Type Errors:
+
+
+Alternative implementation that will allow custom error messages to come from illness modules:
+for illness in illnesses:
+    try:
+        result_data[illness] = {**illness[immunity]()} or even: result_data[illness] = {**illness[immunity](**session[illness])} 
+    except (ValueError, TypeError) as error:  # -> raise this in immunity() pass on TypeError also.
+        result_data[illness] = str(error)
+    except KeyError:
+        return redirect(url_for('immunity_app/immunity'), code=302)
+
+# error demo:
+# >>>def error_raise(a):
+# ...    if isinstance(a, str):
+# ...        raise ValueError('a was a string')
+# ...    if isinstance(a, int):
+# ...        raise TypeError('a was an int')
+# ...    print('a was a float')
+#
+# # you can assign this error to a variable
+# >>>try:
+# ...    error_raise('a')
+# ...except (TypeError, ValueError) as e:
+# ...    g = e
+#
+# >>>g
+# ValueError('a was a string')
+# # You can also cast to string and pass on:
+# >>>try:
+# ...    error_raise('a')
+# ...    g = str(e)
+#
+# >>>g
+# 'a was a string'
+
+
+
+WITH WT FORMS
+store the subform in illnesses eg illnesses['measles']['form']
+
+-then render the illness form in the in the illness template:
+https://flask.palletsprojects.com/en/1.0.x/patterns/wtforms/
+% from "_formhelpers.html" import render_field %}
+<form method=post>
+  <dl>
+    {{ render_field(form.username) }}
+    {{ render_field(form.email) }}
+    {{ render_field(form.password) }}
+    {{ render_field(form.confirm) }}
+    {{ render_field(form.accept_tos) }}
+  </dl>
+  <p><input type=submit value=Register>
+</form>
+
+
+-then in the immunity route:
+for illness in illnesses:
+    if not form.illnesses['measles']['form'].validate()
+        # add illness to error str
+if error - flash error
+else redirect to results
+"""
