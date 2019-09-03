@@ -75,7 +75,7 @@ def test_immunity_session_contents(client, app,
 @pytest.mark.parametrize(
     'request_data, response_status, probability',
     [  # 0 shots
-        ({'birth_year': '1956', 'on_time_measles_vaccinations': '0'}, 200, b'1.0'),
+        ({'birth_year': '1956', 'on_time_measles_vaccinations': '0'}, 200, b'0.9'),
         ({'birth_year': '1957', 'on_time_measles_vaccinations': '0'}, 200, b'0.0'),
         ({'birth_year': '1958', 'on_time_measles_vaccinations': '0'}, 200, b'0.0'),
         ({'birth_year': '2011', 'on_time_measles_vaccinations': '0'}, 200, b'0.0'),
