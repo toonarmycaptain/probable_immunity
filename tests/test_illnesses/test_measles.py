@@ -37,9 +37,9 @@ class TestImmunity:
                                  ((1958, 2), {'probability_of_measles_immunity': 0.97, 'content_templates': ['has_immunisations']}),
                                  ((2011, 2), {'probability_of_measles_immunity': 0.97, 'content_templates': ['has_immunisations']}),
                                  # >2 shots
-                                 ((1957, 3), {'probability_of_measles_immunity': 0.97, 'content_templates': ['greater_than_two_shots_before_age_six_message']}),
-                                 ((1958, 7), {'probability_of_measles_immunity': 0.97, 'content_templates': ['greater_than_two_shots_before_age_six_message']}),
-                                 ((2011, 12), {'probability_of_measles_immunity': 0.97, 'content_templates': ['greater_than_two_shots_before_age_six_message']}),
+                                 ((1957, 3), {'probability_of_measles_immunity': 0.97, 'content_templates': ['has_immunisations', 'greater_than_two_shots_before_age_six_message']}),
+                                 ((1958, 7), {'probability_of_measles_immunity': 0.97, 'content_templates': ['has_immunisations', 'greater_than_two_shots_before_age_six_message']}),
+                                 ((2011, 12), {'probability_of_measles_immunity': 0.97, 'content_templates': ['has_immunisations', 'greater_than_two_shots_before_age_six_message']}),
                              ])
     def test_immunity_post_1957(self, args, returned_dict):
         assert immunity(*args) == returned_dict
