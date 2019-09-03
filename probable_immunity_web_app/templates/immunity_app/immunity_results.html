@@ -8,7 +8,9 @@
 {% block content %}
   <body>
   {% for illness in illnesses %}
-        {% set illness_result_template = 'immunity_app/' + illness + '_immunity_result.html' %}
+        {% set illness_result_template = 'immunity_app/'
+                                        + illness + '/'
+                                        + illness + '_immunity_result.html' %}
         {% include illness_result_template %}
 
   {% endfor %}
