@@ -70,7 +70,7 @@ def immunity_results():
             return redirect(url_for('immunity_app.immunity'), code=302)
         return render_template('immunity_app/immunity_results.html',
                                illnesses=illnesses,
-                               **result_data,  # then use dict of form {illness: (whatever key-value each illness needs}
+                               **result_data,  # Dict form {illness: {k, v}, } - (whatever key-value each illness needs}
                                )
 
 
