@@ -65,7 +65,7 @@ def immunity_results():
                                     }
         except (ValueError, TypeError):  # -> raise this in immunity() pass on TypeError also.
             result_data[illness] = {f'probability_of_{illness}_immunity': 'Unknown.',
-                                    f'{illness}_message': immunity_results_error_message}
+                                    'content_templates': ['immunity_results_error_message']}
         except KeyError:
             return redirect(url_for('immunity_app.immunity'), code=302)
         return render_template('immunity_app/immunity_results.html',

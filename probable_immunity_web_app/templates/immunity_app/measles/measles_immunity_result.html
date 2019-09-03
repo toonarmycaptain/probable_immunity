@@ -1,6 +1,15 @@
 <p><b>Measles</b></p>
 <p>Your probability of being immune to measles if exposed is {{measles['probability_of_measles_immunity']}}</p>
 
-<p>{{measles['measles_message']}}</p>
-
+{% for message in measles['content_templates'] %}
+        {% if message == 'immunity_results_error_message' %}
+            {% include 'immunity_app/immunity_results_error_message.html' %}
+        {% else %}
+            {% set content_template = 'immunity_app/'
+                                       + illness + '/'
+                                       + illness + '_result_content/'
+                                       + message + '.html' %}
+            {% include content_template %}
+        {% endif %}
+{% endfor %}
 <p>This presumes you haven't had the measles. If you've had measles, you are likely immune.</p>
