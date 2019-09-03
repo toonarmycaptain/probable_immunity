@@ -58,7 +58,7 @@ def immunity():
 immunity_results_error_message = (
     b'<html>'
     b'<p>An error was encountered. Please try again.</p>'
-    b'<p>Please raise an <a href="https://github.com/toonarmycaptain/probable_immunity/issues">issue on Github.</p>'
+    b'<p>Please raise an <a href="https://github.com/toonarmycaptain/probable_immunity/issues">issue on Github.</a></p>'
     b'</html>')
 
 
