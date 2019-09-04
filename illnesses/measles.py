@@ -87,7 +87,8 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
         if on_time_measles_vaccinations <= 2:
             probability, messages = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
         if on_time_measles_vaccinations > 2:
-            probability, messages = shots_under_6_immunity[2], ['has_immunisations', 'greater_than_two_shots_before_age_six_message']
+            probability, messages = shots_under_6_immunity[2], ['has_immunisations',
+                                                                'greater_than_two_shots_before_age_six_message']
     return {'probability_of_measles_immunity': probability, 'content_templates': messages}
 
 # need case where shots after age 6
