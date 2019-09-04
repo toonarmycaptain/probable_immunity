@@ -68,7 +68,8 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
                 'has_immunisations': Correct immunisations.  # TODO make better message
 
                 'greater_than_two_shots_before_age_six_message': Note about
-                    data being unavailable for more than 2 shots before age 6. # TODO add caveat about meeting minimum
+                    data being unavailable for more than 2 shots before age 6,
+                    but likely immune.
                     requirements, likely immune.
 
                 'no_immunisations': Unlikely to have any immunity.
