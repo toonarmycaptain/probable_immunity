@@ -45,19 +45,6 @@ rec_shots_under_6 = 2
 
 conferred_immunity = 1
 
-"""
-messages:   'pre_1957_message': CDC explanation of assumed immunity due to exposure before vaccines.
-                ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
-                                
-            'has_immunisations': Correct immunisations.  # TODO make better message
-            
-            'greater_than_two_shots_before_age_six_message': Note about data being unavailable for
-                more than 2 shots before age 6. # TODO add caveat about meeting minimum
-                requirements, likely immune.
-
-
-            'no_immunisations': Unlikely to have any immunity.
-"""
 # shots before 6 years
 shots_under_6_immunity = {
     0: 0.10,
@@ -72,6 +59,20 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
     estimated probability of being immune to measles if exposed.
 
     Returns a float probability, and a list of content templates.
+
+
+    messages:   'pre_1957_message': CDC explanation of assumed immunity due to
+                    exposure before vaccines.
+                    ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
+
+                'has_immunisations': Correct immunisations.  # TODO make better message
+
+                'greater_than_two_shots_before_age_six_message': Note about
+                    data being unavailable for more than 2 shots before age 6. # TODO add caveat about meeting minimum
+                    requirements, likely immune.
+
+                'no_immunisations': Unlikely to have any immunity.
+
 
     :param birth_year: int or None
     :param on_time_measles_vaccinations: int or None
