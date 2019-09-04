@@ -13,33 +13,32 @@ personnel born before 1957 without laboratory evidence of immunity or disease
 should consider getting two doses of MMR vaccine." - https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
 
-"Measles is a highly contagious virus that lives in the nose and throat mucus 
-of an infected person. It can spread to others through coughing and sneezing. 
-Also, measles virus can live for up to two hours in an airspace where the 
+"Measles is a highly contagious virus that lives in the nose and throat mucus
+of an infected person. It can spread to others through coughing and sneezing.
+Also, measles virus can live for up to two hours in an airspace where the
 infected person coughed or sneezed.
 
-If other people breathe the contaminated air or touch the infected surface, 
-then touch their eyes, noses, or mouths, they can become infected. Measles is 
-so contagious that if one person has it, up to 90% of the people close to 
+If other people breathe the contaminated air or touch the infected surface,
+then touch their eyes, noses, or mouths, they can become infected. Measles is
+so contagious that if one person has it, up to 90% of the people close to
 that person who are not immune will also become infected.
 
-Infected people can spread measles to others from four days before through 
+Infected people can spread measles to others from four days before through
 four days after the rash appears."
 https://www.cdc.gov/measles/transmission.html
 
 
-Before a vaccine was available, infection with measles virus was nearly 
-universal during childhood, and more than 90% of persons were immune by age 15 
-years. Measles is still a common and often fatal disease in developing 
-countries. The World Health Organization estimates there were 145,700 deaths 
+Before a vaccine was available, infection with measles virus was nearly
+universal during childhood, and more than 90% of persons were immune by age 15
+years. Measles is still a common and often fatal disease in developing
+countries. The World Health Organization estimates there were 145,700 deaths
 globally from measles in 2013.
 
-Measles is highly communicable, with greater than 90% secondary attack rates 
-among susceptible persons. Measles may be transmitted from 4 days before to 4 
-days after rash onset. Maximum communicability occurs from onset of prodrome 
+Measles is highly communicable, with greater than 90% secondary attack rates
+among susceptible persons. Measles may be transmitted from 4 days before to 4
+days after rash onset. Maximum communicability occurs from onset of prodrome
 through the first 3–4 days of rash.
 https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
-
 """
 
 rec_shots_under_6 = 2
@@ -52,11 +51,11 @@ messages:   'pre_1957_message': CDC explanation of assumed immunity due to expos
                                 
             'has_immunisations': Correct immunisations.  # TODO make better message
             
-            'greater_than_two_shots_before_age_six_message': Note about data being unavailable for 
-                more than 2 shots before age 6. # TODO add caveat about meeting minimum 
-                requirements, likely immune. 
-                
-                                                             
+            'greater_than_two_shots_before_age_six_message': Note about data being unavailable for
+                more than 2 shots before age 6. # TODO add caveat about meeting minimum
+                requirements, likely immune.
+
+
             'no_immunisations': Unlikely to have any immunity.
 """
 # shots before 6 years
