@@ -1,5 +1,4 @@
 from flask import (Blueprint,
-                   flash,
                    Flask,
                    redirect,
                    request,
@@ -7,6 +6,8 @@ from flask import (Blueprint,
                    session,
                    url_for,
                    )
+
+import probable_immunity_web_app.forms.immunity_data_entry_form as forms
 
 from probable_immunity_web_app.illness_config import illnesses
 
@@ -20,39 +21,22 @@ immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 
 @immunity_app_bp.route('/immunity/', methods=('GET', 'POST'))
 def immunity():
+    form = forms.ImmunityDataEntryForm()
+
     if request.method == 'POST':
-        birth_year = request.form['birth_year']
-        on_time_measles_vaccinations = request.form['on_time_measles_vaccinations']
-        error = None
+        if form.validate_on_submit():
+            # Place validated data in session.
+            session['birth_year'] = form.birth_year.data
+            for illness in illnesses:
+                # Store data in session.
+                session[illness.name] = illness.extract_data(form)
 
-        # Handle unentered values.
-        if not birth_year:
-            error = 'Birth year required.'
-        elif not on_time_measles_vaccinations:
-            error = 'Number of measles immunisations before age six needed, if none, enter 0.'
-        # Handle bad data.
-        elif birth_year and on_time_measles_vaccinations:
-            error_str = ''  # Use str to allow concatenation
-            try:
-                # Handle decimals by first converting str to int.
-                session['birth_year'] = int(float(birth_year))
-            except ValueError:
-                error_str = 'Birth year must be a number.\n'
+            if not form.errors:
+                return redirect(url_for('immunity_app.immunity_results'))
+        # else:
+        # Templates will render error messages from form.errors.
 
-            try:
-                # Handle decimals by first converting str to int (eg '2.0' -> 2. Rounds down.
-                session['measles'] = {'on_time_measles_vaccinations': int(float(on_time_measles_vaccinations))}
-            except ValueError:
-                error_str += 'Number of vaccinations must be a number.'
-
-            if error_str:
-                error = error_str
-
-        if error is None:
-            return redirect(url_for('immunity_app.immunity_results'))
-        flash(error)
-
-    return render_template('immunity_app/take_data.html', illnesses=illnesses)
+    return render_template('immunity_app/take_data.html', illnesses=illnesses.names, form=form)
 
 
 @immunity_app_bp.route('/immunity/results/')
@@ -60,12 +44,13 @@ def immunity_results():
     result_data = {}
     for illness in illnesses:
         try:
-            result_data[illness] = {**illnesses[illness]['immunity'](birth_year=session['birth_year'],
-                                                                     **session[illness])
-                                    }
+            result_data[illness.name] = {**illness.immunity(birth_year=session['birth_year'],
+                                                            **session[illness.name])
+                                         }
         except (ValueError, TypeError):  # -> raise this in immunity() pass on TypeError also.
-            result_data[illness] = {f'probability_of_{illness}_immunity': 'Unknown',
-                                    'content_templates': ['immunity_results_error_message']}
+            # Display error for individual illness if error occurred on validated data inside immunity()
+            result_data[illness.name] = {f'probability_of_{illness.name}_immunity': 'Unknown',
+                                         'content_templates': ['immunity_results_error_message']}
         except KeyError:
             return redirect(url_for('immunity_app.immunity'), code=302)
 
