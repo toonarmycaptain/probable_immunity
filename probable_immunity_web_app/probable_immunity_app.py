@@ -57,8 +57,8 @@ def immunity():
 
 @immunity_app_bp.route('/immunity/results/')
 def immunity_results():
+    result_data = {}
     for illness in illnesses:
-        result_data = {}
         try:
             result_data[illness] = {**illnesses[illness]['immunity'](birth_year=session['birth_year'],
                                                                      **session[illness])
@@ -68,10 +68,11 @@ def immunity_results():
                                     'content_templates': ['immunity_results_error_message']}
         except KeyError:
             return redirect(url_for('immunity_app.immunity'), code=302)
-        return render_template('immunity_app/immunity_results.html',
-                               illnesses=illnesses,
-                               **result_data,  # Dict form {illness: {k, v}, } - (whatever key-value each illness needs}
-                               )
+
+    return render_template('immunity_app/immunity_results.html',
+                           illnesses=illnesses.names,
+                           **result_data,  # Dict form {illness: {k, v}, } - (whatever key-value each illness needs}
+                           )
 
 
 if __name__ == '__main__':
