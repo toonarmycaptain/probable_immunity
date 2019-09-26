@@ -80,9 +80,6 @@ def test_immunity_validate_input(client, app,
 @pytest.mark.parametrize(
     'request_data',
     [  # 0 shots
-        ({'birth_year': '1988',
-          'measles': {'on_time_measles_vaccinations': '2'},
-          }),
         ({'birth_year': '1956',
           'measles': {'on_time_measles_vaccinations': '0'},
           }),
