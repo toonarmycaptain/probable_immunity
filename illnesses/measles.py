@@ -43,7 +43,7 @@ https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
 
 rec_shots_under_6 = 2
 
-conferred_immunity = 1
+conferred_immunity = 0.9
 
 # shots before 6 years
 shots_under_6_immunity = {
@@ -82,7 +82,7 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
     # Set defaults:
     probability, messages = shots_under_6_immunity[0], ['no_immunisations']
     if birth_year < 1957:
-        probability, messages = 0.9, ['pre_1957_message']
+        probability, messages = conferred_immunity, ['pre_1957_message']
     elif on_time_measles_vaccinations:
         if on_time_measles_vaccinations <= 2:
             probability, messages = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
