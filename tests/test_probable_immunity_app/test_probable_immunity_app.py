@@ -3,12 +3,15 @@ import pytest
 
 from werkzeug.datastructures import ImmutableMultiDict
 
+from illnesses import measles
 from tests.request_generator_helpers import flatten_dict
 
 
 def test_immunity(client, app):
-    request_data = {'birth_year': '2019',
-                    'measles': {'on_time_measles_vaccinations': '1'},
+    request_data = {'birth_year': 2019,
+                    'measles': {'on_time_measles_vaccinations': 1},
+                    'mumps': {'on_time_mumps_vaccinations': 2,
+                              'mumps_illness': False},
                     }
 
     with client as test_client:
@@ -123,9 +126,11 @@ def test_immunity_validate_input(client, app,
           'measles': {'on_time_measles_vaccinations': '12'},
           }),
     ])
-def test_immunity_session_contents(client, app,
-                                   request_data):
+def test_immunity_session_contents_measles(client, app,
+                                           request_data):
     with app.test_client() as test_client:
+        # Use good data for mumps as testing error raising data in measles.
+        request_data['mumps'] = {'on_time_mumps_vaccinations': 2, 'mumps_illness': False}
         flat_request_data = ImmutableMultiDict(flatten_dict(request_data))
 
         assert test_client.get('immunity/').status_code == 200
@@ -142,67 +147,193 @@ def test_immunity_session_contents(client, app,
 
 
 @pytest.mark.parametrize(
+    'request_data',
+    [  # 0 shots
+        ({'birth_year': '1956',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1956',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '1958',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1958',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '0',
+                    'mumps_illness': False},
+          }),
+        # 1 shot
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '1',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '1',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '1958',
+          'mumps': {'on_time_mumps_vaccinations': '1',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1958',
+          'mumps': {'on_time_mumps_vaccinations': '1',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '1',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '1',
+                    'mumps_illness': False},
+          }),
+        # 2 shots
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '2',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '2',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '1958',
+          'mumps': {'on_time_mumps_vaccinations': '2',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '2',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '2',
+                    'mumps_illness': False},
+          }),
+        # >2 shots
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '3',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '1957',
+          'mumps': {'on_time_mumps_vaccinations': '3',
+                    'mumps_illness': False},
+          }),
+        ({'birth_year': '1958',
+          'mumps': {'on_time_mumps_vaccinations': '7',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '12',
+                    'mumps_illness': True},
+          }),
+        ({'birth_year': '2011',
+          'mumps': {'on_time_mumps_vaccinations': '12',
+                    'mumps_illness': False},
+          }),
+    ])
+def test_immunity_session_contents_mumps(client, app,
+                                         request_data):
+    with app.test_client() as test_client:
+        # Use good data for mumps as testing error raising data in measles.
+        request_data['measles'] = {'on_time_measles_vaccinations': 2}
+        flat_request_data = ImmutableMultiDict(flatten_dict(request_data))
+        print(flat_request_data)
+        assert test_client.get('immunity/').status_code == 200
+
+        response = test_client.post(
+            'immunity/', data=flat_request_data, content_type='application/x-www-form-urlencoded')
+
+        assert flask.session['birth_year'] == int(request_data['birth_year'])
+        assert flask.session['mumps'] == {
+            'on_time_mumps_vaccinations': int(request_data['mumps']['on_time_mumps_vaccinations']),
+            'mumps_illness': request_data['mumps']['mumps_illness']}
+
+        # Ensure successful redirect to results in response.
+        assert 'http://localhost/immunity/results/' == response.headers['Location']
+
+
+@pytest.mark.parametrize(
     'request_data, response_status, probability',
     [  # 0 shots
         ({'birth_year': '1956',
           'measles': {'on_time_measles_vaccinations': '0',
-                      }
-          }, 200, b'0.9'),
+                      },
+          }, 200, measles.conferred_immunity),
         ({'birth_year': '1957',
           'measles': {'on_time_measles_vaccinations': '0',
                       }
-          }, 200, b'0.0'),
+          }, 200, measles.shots_under_6_immunity[0]),
         ({'birth_year': '1958',
           'measles': {'on_time_measles_vaccinations': '0',
                       }
-          }, 200, b'0.0'),
+          }, 200, measles.shots_under_6_immunity[0]),
         ({'birth_year': '2011',
           'measles': {'on_time_measles_vaccinations': '0',
                       }
-          }, 200, b'0.0'),
+          }, 200, measles.shots_under_6_immunity[0]),
         # 1 shot
         ({'birth_year': '1957',
           'measles': {'on_time_measles_vaccinations': '1',
                       }
-          }, 200, b'0.93'),
+          }, 200, measles.shots_under_6_immunity[1]),
         ({'birth_year': '1958',
           'measles': {'on_time_measles_vaccinations': '1',
                       }
-          }, 200, b'0.93'),
+          }, 200, measles.shots_under_6_immunity[1]),
         ({'birth_year': '2011',
           'measles': {'on_time_measles_vaccinations': '1',
                       }
-          }, 200, b'0.93'),
+          }, 200, measles.shots_under_6_immunity[1]),
         # 2 shots
         ({'birth_year': '1957',
           'measles': {'on_time_measles_vaccinations': '2',
                       }
-          }, 200, b'0.97'),
+          }, 200, measles.shots_under_6_immunity[2]),
         ({'birth_year': '1958',
           'measles': {'on_time_measles_vaccinations': '2',
                       }
-          }, 200, b'0.97'),
+          }, 200, measles.shots_under_6_immunity[2]),
         ({'birth_year': '2011',
           'measles': {'on_time_measles_vaccinations': '2',
                       }
-          }, 200, b'0.97'),
+          }, 200, measles.shots_under_6_immunity[2]),
         # >2 shots
         ({'birth_year': '1957',
           'measles': {'on_time_measles_vaccinations': '3',
                       }
-          }, 200, b'0.97'),
+          }, 200, measles.shots_under_6_immunity[2]),
         ({'birth_year': '1958',
           'measles': {'on_time_measles_vaccinations': '7',
                       }
-          }, 200, b'0.97'),
+          }, 200, measles.shots_under_6_immunity[2]),
         ({'birth_year': '2011',
           'measles': {'on_time_measles_vaccinations': '12',
                       }
-          }, 200, b'0.97'),
+          }, 200, measles.shots_under_6_immunity[2]),
     ])
 def test_immunity_results(client, app,
                           request_data,
                           response_status, probability):
+    # Use good data for mumps as testing error raising data in measles.
+    request_data['mumps'] = {'on_time_mumps_vaccinations': 2, 'mumps_illness': False}
     flat_request_data = ImmutableMultiDict(flatten_dict(request_data))
 
     assert client.get('immunity/').status_code == 200
@@ -213,7 +344,7 @@ def test_immunity_results(client, app,
     response = client.get('http://localhost/immunity/results/', follow_redirects=True)
     assert response.status_code == response_status
     # Use probability of immunity to test response content.
-    assert probability in response.data
+    assert f'{probability}'.encode('utf-8') in response.data
 
 
 @pytest.mark.parametrize(
@@ -235,6 +366,8 @@ def test_immunity_results_raising_error(client, app,
             test_client_session['birth_year'] = session_data['birth_year']
             test_client_session['measles'] = {
                 'on_time_measles_vaccinations': session_data['on_time_measles_vaccinations']}
+            # Use good data for mumps as testing error raising data in measles.
+            test_client_session['mumps'] = {'on_time_mumps_vaccinations': 2, 'mumps_illness': False}
 
         response = test_client.get('http://localhost/immunity/results/', follow_redirects=True)
 
