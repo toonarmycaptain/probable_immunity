@@ -27,5 +27,6 @@ class ImmunityDataEntryForm(FlaskForm):
     )
 
     measles = FormField(illnesses.measles.form)
+    mumps = FormField(illnesses.mumps.form)
 
     submit = SubmitField('Submit')

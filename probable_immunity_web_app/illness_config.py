@@ -6,6 +6,7 @@ with each illness, and serve a nice API illnesses.illness.xyz.
 
 """
 from probable_immunity_web_app.illnesses import (Measles,
+                                                 Mumps,
                                                  )
 
 
@@ -25,12 +26,15 @@ class Illnesses:
     Adding or removing from _illnesses_list with activate/deactivate in app.
 
     """
+
     def __init__(self):
         # Add illness objects
         self.measles = Measles
+        self.mumps = Mumps
 
         # Register illnesses
         self._illnesses_list = [self.measles,
+                                self.mumps,
                                 ]
 
     def __iter__(self):
