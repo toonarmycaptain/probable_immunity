@@ -20,7 +20,7 @@ class Mumps(FlaskForm):
         ],
     )
     mumps_illness = BooleanField(label='Had a case of the measles:',
-                                 false_values=("False")
+                                 false_values=("False")  # This is needed to use False bool in request tests.
                                  )
 
 
