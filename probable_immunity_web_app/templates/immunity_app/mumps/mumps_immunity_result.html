@@ -1,0 +1,23 @@
+<p><b>Mumps</b></p>
+<p>
+    Your probability of being immune to mumps if exposed is {{mumps['probability_of_mumps_immunity']}}.<br>
+    {% if mumps['content_templates'][0] != 'immunity_results_error_message' %}
+        This means that your probability of contracting mumps, if exposed, is {{ "{:.2f}%".format((1-mumps['probability_of_mumps_immunity'])*100) }}.
+        <br>
+    {% endif %}
+
+    {% for message in mumps['content_templates'] %}
+            {% if message == 'immunity_results_error_message' %}
+                {% include 'immunity_app/immunity_results_error_message.html' %}
+            {% else %}
+                {% set content_template = 'immunity_app/'
+                                           + illness + '/'
+                                           + illness + '_result_content/'
+                                           + message + '.html' %}
+                {% include content_template %}
+            {% endif %}
+    {% endfor %}
+    {% if 'previous_illness' not in mumps['content_templates'] %}
+        <br>This presumes you haven't had the mumps. If you've had mumps, you are likely immune.
+    {% endif %}
+</p>
