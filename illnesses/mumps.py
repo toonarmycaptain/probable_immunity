@@ -6,23 +6,21 @@ from typing import Dict
 current_year: int = datetime.date.today().year  # Returns 4 digit year.
 
 """
-MMR vaccine is very safe and effective. The mumps component of the MMR vaccine
+"MMR vaccine is very safe and effective. The mumps component of the MMR vaccine
 is about 88% (range: 31-95%) effective when a person gets two doses; one dose
 is about 78% (range: 49%−92%) effective. Children may also get MMRV vaccine,
-which protects against measles, mumps, rubella, and varicella (chickenpox).
-"""
+which protects against measles, mumps, rubella, and varicella (chickenpox)."
 
-"""
-During these outbreaks, people who previously had one or two doses of MMR
+"During these outbreaks, people who previously had one or two doses of MMR
 vaccine can get mumps too. Experts aren’t sure why vaccinated people still get
 mumps; it could be that their immune system didn’t respond as well as it
 should have to the vaccine. Or their immune system’s ability to fight the
 infection decreased over time. Disease symptoms are milder and complications
 are less frequent in vaccinated people. Also, high vaccination coverage helps
 to limit the size, duration, and spread of mumps outbreaks. So it’s still
-very important to be up to date on MMR vaccine.
+very important to be up to date on MMR vaccine."
 
-During a mumps outbreak, public health authorities might recommend an
+"During a mumps outbreak, public health authorities might recommend an
 additional dose of MMR vaccine for people who belong to groups at increased
 risk for getting mumps. These groups are usually those who are likely to have
 close contact, such as sharing sport equipment or drinks, kissing, or living
@@ -30,39 +28,42 @@ in close quarters, with a person who has mumps. Your local public health
 authorities or institution will notify you if you are at increased risk and
 should receive this dose. If you already have two doses of MMR, it is not
 necessary to seek out vaccination unless the authorities tell you that
-you are part of this group.
+you are part of this group."
 - https://www.cdc.gov/mumps/vaccination.html
-"""
 
-"""
+Other sources:
 https://stm.sciencemag.org/content/10/433/eaao5945
 https://www.hsph.harvard.edu/news/press-releases/mumps-resurgence-waning-immunity/
+https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2913658/
+https://stm.sciencemag.org/content/10/433/eaao5945.full
+https://www.immunize.org/catg.d/p4211.pdf
 """
 
-messages = {'pre_1957_message': ("According to the CDC, you are likely immune to mumps due to "
-                                 "childhood exposure.<br>"
+mumps_templates = {
+    'pre_1957_message': ("According to the CDC, you are likely immune to mumps due to "
+                         "childhood exposure.<br>"
 
-                                 "NB: \"Birth before 1957 provides only "
-                                 "presumptive evidence for measles, mumps, and rubella. Before "
-                                 "vaccines were available, nearly everyone was infected with "
-                                 "measles, mumps, and rubella viruses during childhood. The "
-                                 "majority of people born before 1957 are likely to have been "
-                                 "infected naturally and therefore are presumed to be protected "
-                                 "against measles, mumps, and rubella. Healthcare personnel born "
-                                 "before 1957 without laboratory evidence of immunity or disease "
-                                 "should consider getting two doses of MMR vaccine.\" "
-                                 "- <a href='https://www.cdc.gov/vaccines/vpd/mmr/public/index.html'>"
-                                 "CDC - Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know</a>"),
-            'has_immunisations': ("This means you have a statistical probability of being immune "
-                                  "to measles if you are exposed. The closer to 1.0, the more "
-                                  "likely you are immune."),  # TODO make better message
-            'greater_than_two_shots_before_age_six_message': ("Data not available for more than 2 "
-                                                              "shots before age 6."),
-            'no_immunisations': ("You are unlikely to have any immunity to measles, if you are "
-                                 "exposed, you are very likely to be infected."),
-            'waning_warning': ("something about efficacy decreasing over time, differing takeup by "
-                               "immune system"),
-            }
+                         "NB: \"Birth before 1957 provides only "
+                         "presumptive evidence for measles, mumps, and rubella. Before "
+                         "vaccines were available, nearly everyone was infected with "
+                         "measles, mumps, and rubella viruses during childhood. The "
+                         "majority of people born before 1957 are likely to have been "
+                         "infected naturally and therefore are presumed to be protected "
+                         "against measles, mumps, and rubella. Healthcare personnel born "
+                         "before 1957 without laboratory evidence of immunity or disease "
+                         "should consider getting two doses of MMR vaccine.\" "
+                         "- <a href='https://www.cdc.gov/vaccines/vpd/mmr/public/index.html'>"
+                         "CDC - Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know</a>"),
+    'has_immunisations': ("This means you have a statistical probability of being immune "
+                          "to mumps if you are exposed. The closer to 1.0, the more "
+                          "likely you are immune."),  # TODO make better message
+    'greater_than_two_shots_before_age_six_message': ("Data not available for more than 2 "
+                                                      "shots before age 6."),
+    'no_immunisations': ("You are unlikely to have any immunity to mumps, if you are "
+                         "exposed, you are very likely to be infected."),
+    'waning_warning': ("Note about efficacy decreasing over time, differing takeup by "
+                       "immune system"),
+}
 
 """
 regression_data_1_dose = {
@@ -88,8 +89,6 @@ regression_data_2_dose = {
     3.5: .924,  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2913658/
     5.5: .864,  # https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2913658/
 }
-
-
 
 NB The current iterations of these algorithms have one-dose immunity greater
 than two dose immunity for a birth year before 1942 (ie birth_year <= 1941),
