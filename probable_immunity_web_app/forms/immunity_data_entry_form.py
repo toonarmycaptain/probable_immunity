@@ -4,8 +4,9 @@ import datetime
 
 from flask_wtf import FlaskForm
 from wtforms import (FormField,
+                     SubmitField,
                      validators,
-                     SubmitField)
+                     )
 from wtforms.fields.html5 import IntegerField
 
 from probable_immunity_web_app.illness_config import illnesses
