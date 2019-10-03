@@ -44,10 +44,10 @@ https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
 rec_shots_under_6 = 2
 
 conferred_immunity = 0.9
-
+natural_immunity = 0.10
 # shots before 6 years
 shots_under_6_immunity = {
-    0: 0.10,
+    0: natural_immunity,
     1: 0.93,
     2: 0.97,
 }
