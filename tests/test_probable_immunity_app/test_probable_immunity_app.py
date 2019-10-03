@@ -74,8 +74,6 @@ def test_immunity_validate_input(client, app,
 
         response = test_client.post(
             'immunity/', data=flat_request_data)
-        print(f' response:{response}')
-        print(f'response.data: {response.data}')
         for error in messages:
             assert error in response.data
 
@@ -255,7 +253,7 @@ def test_immunity_session_contents_mumps(client, app,
         # Use good data for mumps as testing error raising data in measles.
         request_data['measles'] = {'on_time_measles_vaccinations': 2}
         flat_request_data = ImmutableMultiDict(flatten_dict(request_data))
-        print(flat_request_data)
+
         assert test_client.get('immunity/').status_code == 200
 
         response = test_client.post(

@@ -26,6 +26,5 @@ class Mumps(FlaskForm):
 
 
 def extract_mumps_form_data(form: Type[FlaskForm]) -> dict:
-    print(f'mumps illness: {form.mumps.mumps_illness.data}\n')
     return {'on_time_mumps_vaccinations': int(form.mumps.on_time_mumps_vaccinations.data),
             'mumps_illness': form.mumps.mumps_illness.data}
