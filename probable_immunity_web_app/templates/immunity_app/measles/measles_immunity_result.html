@@ -3,19 +3,19 @@
     Your probability of being immune to measles if exposed is {{measles['probability_of_measles_immunity']}}.<br>
     {% if measles['content_templates'][0] != 'immunity_results_error_message' %}
         This means that your probability of contracting measles, if exposed, is {{ "{:.2f}%".format((1-measles['probability_of_measles_immunity'])*100) }}.
-    {% endif %}
-</p>
-
-{% for message in measles['content_templates'] %}
-        {% if message == 'immunity_results_error_message' %}
-            {% include 'immunity_app/immunity_results_error_message.html' %}
-        {% else %}
-            {% set content_template = 'immunity_app/'
-                                       + illness + '/'
-                                       + illness + '_result_content/'
-                                       + message + '.html' %}
-            {% include content_template %}
-        {% endif %}
         <br>
-{% endfor %}
-<p>This presumes you haven't had the measles. If you've had measles, you are likely immune.</p>
+    {% endif %}
+
+    {% for message in measles['content_templates'] %}
+            {% if message == 'immunity_results_error_message' %}
+                {% include 'immunity_app/immunity_results_error_message.html' %}
+            {% else %}
+                {% set content_template = 'immunity_app/'
+                                           + illness + '/'
+                                           + illness + '_result_content/'
+                                           + message + '.html' %}
+                {% include content_template %}
+            {% endif %}
+    {% endfor %}
+    <br>This presumes you haven't had the measles. If you've had measles, you are likely immune*.
+</p>

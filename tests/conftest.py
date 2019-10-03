@@ -7,6 +7,7 @@ from probable_immunity_web_app.app_factory import create_app
 def app():
     app = create_app({
         'TESTING': True,
+        'WTF_CSRF_ENABLED': False,
     })
 
     yield app
