@@ -1,7 +1,9 @@
 import datetime
 
 from math import e
-from typing import Dict
+from typing import (Dict,
+                    List,
+                    Union)
 
 current_year: int = datetime.date.today().year  # Returns 4 digit year.
 
@@ -109,6 +111,12 @@ two_dose_waning_imm_exp_coeff = -0.03239090802
 
 
 def one_dose_immunity(birth_year: int) -> float:
+    """
+    Returns a probability of immunity given one dose of mumps vaccine.
+
+    :param birth_year: int
+    :return:  float 0<=x<=1
+    """
     years_after_age_six = (current_year - birth_year) - 6
     if years_after_age_six < 0:
         years_after_age_six = 0
@@ -117,6 +125,12 @@ def one_dose_immunity(birth_year: int) -> float:
 
 
 def two_dose_immunity(birth_year: int) -> float:
+    """
+    Returns a probability of immunity given two doses of mumps vaccine.
+
+    :param birth_year: int
+    :return:  float 0<=x<=1
+    """
     years_after_age_six = (current_year - birth_year) - 6
     if years_after_age_six < 0:
         years_after_age_six = 0
@@ -124,7 +138,9 @@ def two_dose_immunity(birth_year: int) -> float:
     return two_dose_init_immunity * (e ** (two_dose_waning_imm_exp_coeff * years_after_age_six))
 
 
-def immunity(birth_year=None, on_time_mumps_vaccinations: int = None, mumps_illness: bool = False) -> Dict:
+def immunity(birth_year=None,
+             on_time_mumps_vaccinations: int = None,
+             mumps_illness: bool = False) -> Dict[str, Union[float, List[str]]]:
     """
     Takes year of birth, number of shots before age 6, previous illness, and
     provides an estimated probability of being immune to mumps if exposed.
@@ -132,31 +148,31 @@ def immunity(birth_year=None, on_time_mumps_vaccinations: int = None, mumps_illn
     :param birth_year: int or None
     :param on_time_mumps_vaccinations: int or None
     :param mumps_illness: bool
-    :return: Dict {'probability_of_measles_immunity': float, 'measles_message': str}
+    :return: Dict {'probability_of_mumps_immunity': float, 'content_templates': List[str]}
     """
     # Set defaults:
-    probability, messages = natural_immunity, ['no_immunisations']
+    probability, templates = natural_immunity, ['no_immunisations']
+
     if mumps_illness:
-        probability, messages = conferred_immunity, ['previous_illness']
+        probability, templates = conferred_immunity, ['previous_illness']
 
     elif birth_year < 1957:
-        probability, messages = conferred_immunity, ['pre_1957_message',
+        probability, templates = conferred_immunity, ['pre_1957_message',
                                                       ]
     elif on_time_mumps_vaccinations:
         if on_time_mumps_vaccinations == 1:
-            probability, messages = one_dose_immunity(birth_year), ['has_immunisations',
-                                                                    'waning_warning',
-                                                                    ]
+            probability, templates = one_dose_immunity(birth_year), ['has_immunisations',
+                                                                     'waning_warning',
+                                                                     ]
         if on_time_mumps_vaccinations == 2:
-            probability, messages = two_dose_immunity(birth_year), ['has_immunisations',
-                                                                    'waning_warning',
-                                                                    ]
-            print('we had 2')
+            probability, templates = two_dose_immunity(birth_year), ['has_immunisations',
+                                                                     'waning_warning',
+                                                                     ]
         if on_time_mumps_vaccinations > 2:
-            probability, messages = two_dose_immunity(birth_year), ['has_immunisations',
-                                                                    'waning_warning',
-                                                                    'greater_than_two_shots_before_age_six_message',
-                                                                    ]
-    return {'probability_of_mumps_immunity': probability, 'content_templates': messages}
+            probability, templates = two_dose_immunity(birth_year), ['has_immunisations',
+                                                                     'waning_warning',
+                                                                     'greater_than_two_shots_before_age_six_message',
+                                                                     ]
+    return {'probability_of_mumps_immunity': probability, 'content_templates': templates}
 
 # need case where shots after age 6
