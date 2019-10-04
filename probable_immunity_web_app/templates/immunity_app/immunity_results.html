@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Immunity results:{% endblock %}</h1>
+    <h1>{% block title %}Immunity results:{% endblock %}</h1>
 
 {% endblock %}
 
 {% block content %}
-  <body>
-  {% for illness in illnesses %}
+    <body>
+    {% for illness in illnesses %}
         {% set illness_result_template = 'immunity_app/'
                                         + illness + '/'
                                         + illness + '_immunity_result.html' %}
         {% include illness_result_template %}
 
-  {% endfor %}
-  </body>
+    {% endfor %}
+    </body>
 {% endblock %}
