@@ -13,6 +13,11 @@
                                         + illness + '_immunity_result.html' %}
         {% include illness_result_template %}
 
-    {% endfor %}
+    {% endfor %}.
+
+    <p align="right">
+        <a href="{{ url_for('immunity_app.immunity') }}" title="Back to data entry.">Get another estimate of
+            immunity.</a>
+    </p>
     </body>
 {% endblock %}
