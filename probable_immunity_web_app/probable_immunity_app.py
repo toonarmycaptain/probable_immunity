@@ -19,7 +19,6 @@ immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 def immunity():
     illnesses = Illnesses(current_app.config['ILLNESS_LIST'])
     # Initialise form from config:
-    from importlib import reload; reload(forms)  # Enables testing with different configs, as setattrs persist.
     for illness in illnesses:
         setattr(forms.ImmunityDataEntryForm, illness.name, FormField(illness.form))
     # Set form
