@@ -4,6 +4,8 @@ from pathlib import Path
 
 from flask import Flask
 
+from .config import ProductionConfig
+
 about_text_string = (
     # Primarily for testing, hence binary string.
     b'<html>'
@@ -21,18 +23,19 @@ about_text_string = (
 
 def create_app(test_config=None):
     # Create, configure app
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
     app.config.from_mapping(
         SECRET_KEY=os.urandom(32),
         DATABASE=Path(Path(app.instance_path), 'probable_immunity_app.sqlite'),  # plan to use PostgreSQL
     )
 
+    # Load config:
     if test_config is None:
-        # Load instance config when not testing.
-        app.config.from_pyfile('config.py', silent=True)
+        # Load Production config when not testing.
+        app.config.from_object(ProductionConfig())
     else:
         # Load test config.
-        app.config.from_mapping(test_config)
+        app.config.update(test_config)
 
     try:
         Path.mkdir(Path(app.instance_path), parents=True, exist_ok=True)
