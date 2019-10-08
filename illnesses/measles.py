@@ -13,55 +13,41 @@ personnel born before 1957 without laboratory evidence of immunity or disease
 should consider getting two doses of MMR vaccine." - https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
 
-"Measles is a highly contagious virus that lives in the nose and throat mucus 
-of an infected person. It can spread to others through coughing and sneezing. 
-Also, measles virus can live for up to two hours in an airspace where the 
+"Measles is a highly contagious virus that lives in the nose and throat mucus
+of an infected person. It can spread to others through coughing and sneezing.
+Also, measles virus can live for up to two hours in an airspace where the
 infected person coughed or sneezed.
 
-If other people breathe the contaminated air or touch the infected surface, 
-then touch their eyes, noses, or mouths, they can become infected. Measles is 
-so contagious that if one person has it, up to 90% of the people close to 
+If other people breathe the contaminated air or touch the infected surface,
+then touch their eyes, noses, or mouths, they can become infected. Measles is
+so contagious that if one person has it, up to 90% of the people close to
 that person who are not immune will also become infected.
 
-Infected people can spread measles to others from four days before through 
+Infected people can spread measles to others from four days before through
 four days after the rash appears."
 https://www.cdc.gov/measles/transmission.html
 
 
-Before a vaccine was available, infection with measles virus was nearly 
-universal during childhood, and more than 90% of persons were immune by age 15 
-years. Measles is still a common and often fatal disease in developing 
-countries. The World Health Organization estimates there were 145,700 deaths 
+Before a vaccine was available, infection with measles virus was nearly
+universal during childhood, and more than 90% of persons were immune by age 15
+years. Measles is still a common and often fatal disease in developing
+countries. The World Health Organization estimates there were 145,700 deaths
 globally from measles in 2013.
 
-Measles is highly communicable, with greater than 90% secondary attack rates 
-among susceptible persons. Measles may be transmitted from 4 days before to 4 
-days after rash onset. Maximum communicability occurs from onset of prodrome 
+Measles is highly communicable, with greater than 90% secondary attack rates
+among susceptible persons. Measles may be transmitted from 4 days before to 4
+days after rash onset. Maximum communicability occurs from onset of prodrome
 through the first 3–4 days of rash.
 https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
-
 """
 
 rec_shots_under_6 = 2
 
-conferred_immunity = 1
-
-"""
-messages:   'pre_1957_message': CDC explanation of assumed immunity due to exposure before vaccines.
-                ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
-                                
-            'has_immunisations': Correct immunisations.  # TODO make better message
-            
-            'greater_than_two_shots_before_age_six_message': Note about data being unavailable for 
-                more than 2 shots before age 6. # TODO add caveat about meeting minimum 
-                requirements, likely immune. 
-                
-                                                             
-            'no_immunisations': Unlikely to have any immunity.
-"""
+conferred_immunity = 0.9
+natural_immunity = 0.10
 # shots before 6 years
 shots_under_6_immunity = {
-    0: 0.10,
+    0: natural_immunity,
     1: 0.93,
     2: 0.97,
 }
@@ -74,6 +60,21 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
 
     Returns a float probability, and a list of content templates.
 
+
+    messages:   'pre_1957_message': CDC explanation of assumed immunity due to
+                    exposure before vaccines.
+                    ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
+
+                'has_immunisations': Correct immunisations.  # TODO make better message
+
+                'greater_than_two_shots_before_age_six_message': Note about
+                    data being unavailable for more than 2 shots before age 6,
+                    but likely immune.
+                    requirements, likely immune.
+
+                'no_immunisations': Unlikely to have any immunity.
+
+
     :param birth_year: int or None
     :param on_time_measles_vaccinations: int or None
     :return: Dict {'probability_of_measles_immunity': float, 'content_templates': List(str)}
@@ -81,12 +82,13 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
     # Set defaults:
     probability, messages = shots_under_6_immunity[0], ['no_immunisations']
     if birth_year < 1957:
-        probability, messages = 0.9, ['pre_1957_message']
+        probability, messages = conferred_immunity, ['pre_1957_message']
     elif on_time_measles_vaccinations:
         if on_time_measles_vaccinations <= 2:
             probability, messages = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
         if on_time_measles_vaccinations > 2:
-            probability, messages = shots_under_6_immunity[2], ['has_immunisations', 'greater_than_two_shots_before_age_six_message']
+            probability, messages = shots_under_6_immunity[2], ['has_immunisations',
+                                                                'greater_than_two_shots_before_age_six_message']
     return {'probability_of_measles_immunity': probability, 'content_templates': messages}
 
 # need case where shots after age 6

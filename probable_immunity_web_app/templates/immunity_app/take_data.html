@@ -5,21 +5,28 @@
 {% endblock %}
 
 {% block content %}
-<!-- Need to force numerical input, custom error messages (which can be found in probable_immunity_app.py). -->
 
   <form method="post">
-    <label for="birth_year">Year of birth: </label>
-    <input name="birth_year" id="birth_year" title="Enter a 4 digit year."
-           type="number"
-           oninvalid="this.setCustomValidity('Please enter a four digit year.')"
-           oninput="this.setCustomValidity('')"
-           required>
-    {% for illness in illnesses %}
-        {% set illness_template = 'immunity_app/'
-                                 + illness + '/'
-                                 + illness + '_data_entry.html' %}
-        {% include illness_template ignore missing%}
-    {%  endfor %}
+    {{ form.hidden_tag() }}
+    <!-- Common data -->
+    <p>
+        <!-- birth_year -->
+        {{ form.birth_year.label }}<br>
+        {{ form.birth_year(size=32) }}
+        {% if form.errors.birth_year %}
+            {% for error in form.errors.birth_year %}
+                 <br class=error><strong>Error:</strong> {{ error }}
+            {% endfor %}
+        {% endif %}
 
+        <!-- Illness forms -->
+        {% for illness in illnesses %}
+            {% set illness_template = 'immunity_app/'
+                                     + illness + '/'
+                                     + illness + '_data_entry.html' %}
+            {% include illness_template ignore missing%}
+        {% endfor %}
+        <br>{{ form.submit }}
+    </p>
   </form>
 {% endblock %}

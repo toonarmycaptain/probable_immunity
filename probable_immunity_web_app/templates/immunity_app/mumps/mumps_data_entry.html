@@ -1,0 +1,22 @@
+<p><b>Mumps</b></p>
+{{ form.mumps.hidden_tag() }}
+<!–– on_time_mumps_vaccinations ––>
+{{ form.mumps.on_time_mumps_vaccinations.label }}
+{{ form.mumps.on_time_mumps_vaccinations }}
+{% if form.errors.mumps %}
+    {% if form.errors.mumps.on_time_mumps_vaccinations %}
+        {% for error in form.errors.mumps.on_time_mumps_vaccinations %}
+            <br class=error><strong>Error:</strong> {{ error }}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+<!–– mumps_illness ––>
+{{ form.mumps.mumps_illness.label }}
+{{ form.mumps.mumps_illness }}
+{% if form.errors.mumps %}
+    {% if form.errors.mumps.mumps_illness %}
+        {% for error in form.errors.mumps.mumps_illness %}
+            <br class=error><strong>Error:</strong> {{ error }}
+        {% endfor %}
+    {% endif %}
+{% endif %}
