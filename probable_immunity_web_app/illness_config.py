@@ -5,9 +5,6 @@ Register illnesses with application, encapsulate forms/functions associated
 with each illness, and serve a nice API illnesses.illness.xyz.
 
 """
-from probable_immunity_web_app.illnesses import (Measles,
-                                                 Mumps,
-                                                 )
 
 
 class Illnesses:
@@ -17,25 +14,19 @@ class Illnesses:
 
     Allows for iterating over the illness objects, a list of names etc.
 
-    To configure an illness, must:
-        import illness object,
-        add illness as an attribute in __init__:
-            self.illness_name = Illness_name_object
-        add illness attr to _illnesses_list:
-            self._illnesses_list = [self.illness_name,]
-    Adding or removing from _illnesses_list with activate/deactivate in app.
+    Illness objects are passed as a list to constructor.
+    This list is set in the loaded config file.
 
     """
 
-    def __init__(self):
-        # Add illness objects
-        self.measles = Measles
-        self.mumps = Mumps
+    def __init__(self, illness_list):
+        self._illnesses_list = []
 
-        # Register illnesses
-        self._illnesses_list = [self.measles,
-                                self.mumps,
-                                ]
+        # Add illness objects
+        for illness in illness_list:
+            setattr(self, illness.name, illness)
+            # Register illness
+            self._illnesses_list.append(illness)
 
     def __iter__(self):
         return iter(self._illnesses_list)
@@ -43,6 +34,3 @@ class Illnesses:
     @property
     def names(self):
         return [illness.name for illness in self._illnesses_list]
-
-
-illnesses = Illnesses()
