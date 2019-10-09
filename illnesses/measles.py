@@ -41,8 +41,6 @@ through the first 3–4 days of rash.
 https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
 """
 
-rec_shots_under_6 = 2
-
 conferred_immunity = 0.9
 natural_immunity = 0.10
 # shots before 6 years
