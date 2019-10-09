@@ -1,5 +1,7 @@
 from typing import Dict
 
+from probable_immunity_web_app.forms.immunity_data_entry_form import current_year
+
 """
 CDC Presumptive evidence of immunity: https://www.cdc.gov/vaccines/pubs/surv-manual/chpt07-measles.html
 
@@ -51,19 +53,27 @@ shots_under_6_immunity = {
 }
 
 
-def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
+def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
     """
     Takes year of birth, number of shots before age 6, and provides an
     estimated probability of being immune to measles if exposed.
 
     Returns a float probability, and a list of content templates.
 
+    birth_year accepts a four digit positive integer (eg 1000+) up to the
+        current year, but infers equivalent floats eg 1980.0 accepted as 1980.
+
+    on_time_measles_vaccinations not required -  not supplied or falsey value
+        such as None, False, ''
+
+    ValueError will be deliberately raised on improper data.
+
 
     messages:   'pre_1957_message': CDC explanation of assumed immunity due to
                     exposure before vaccines.
                     ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
-                'has_immunisations': Correct immunisations.  # TODO make better message
+                'has_immunisations': Correct immunisations.
 
                 'greater_than_two_shots_before_age_six_message': Note about
                     data being unavailable for more than 2 shots before age 6,
@@ -73,20 +83,33 @@ def immunity(birth_year=None, on_time_measles_vaccinations: int = None) -> Dict:
                 'no_immunisations': Unlikely to have any immunity.
 
 
-    :param birth_year: int or None
+    :param birth_year: int
     :param on_time_measles_vaccinations: int or None
+    :raises: ValueError On improper valued data.
     :return: Dict {'probability_of_measles_immunity': float, 'content_templates': List(str)}
     """
     # Set defaults:
     probability, messages = shots_under_6_immunity[0], ['no_immunisations']
+    # Enforce integer 4 digit birth year up to current year.
+    if not isinstance(birth_year, int) or not 999 < birth_year <= current_year:
+        raise ValueError(f'Birth year must be a 4 digit integer less than {current_year}.')
     if birth_year < 1957:
         probability, messages = conferred_immunity, ['pre_1957_message']
+
     elif on_time_measles_vaccinations:
+        if not (int(on_time_measles_vaccinations) > 0  # Must be > 0
+                # Must be integer.
+                and (isinstance(on_time_measles_vaccinations, int)
+                     # Or float equiv to int eg 2.0 = 2
+                     or int(on_time_measles_vaccinations) == on_time_measles_vaccinations)):
+            raise ValueError('Measles vaccinations must be a positive integer.')  # Or zero.
+
         if on_time_measles_vaccinations <= 2:
             probability, messages = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
         if on_time_measles_vaccinations > 2:
             probability, messages = shots_under_6_immunity[2], ['has_immunisations',
                                                                 'greater_than_two_shots_before_age_six_message']
+
     return {'probability_of_measles_immunity': probability, 'content_templates': messages}
 
 # need case where shots after age 6
