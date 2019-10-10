@@ -1,11 +1,12 @@
-import datetime
-
 from math import e
 from typing import (Dict,
                     List,
                     Union)
 
-current_year: int = datetime.date.today().year  # Returns 4 digit year.
+from .common_helpers import (current_year,
+                            validate_birth_year,
+                            )
+
 
 """
 "MMR vaccine is very safe and effective. The mumps component of the MMR vaccine
@@ -138,20 +139,23 @@ def two_dose_immunity(birth_year: int) -> float:
     return two_dose_init_immunity * (e ** (two_dose_waning_imm_exp_coeff * years_after_age_six))
 
 
-def immunity(birth_year=None,
+def immunity(birth_year: int,
              on_time_mumps_vaccinations: int = None,
              mumps_illness: bool = False) -> Dict[str, Union[float, List[str]]]:
     """
     Takes year of birth, number of shots before age 6, previous illness, and
     provides an estimated probability of being immune to mumps if exposed.
 
-    :param birth_year: int or None
+    :param birth_year: int
     :param on_time_mumps_vaccinations: int or None
     :param mumps_illness: bool
     :return: Dict {'probability_of_mumps_immunity': float, 'content_templates': List[str]}
     """
     # Set defaults:
     probability, templates = natural_immunity, ['no_immunisations']
+
+    # Enforce integer 4 digit birth year up to current year.
+    validate_birth_year(birth_year)
 
     if mumps_illness:
         probability, templates = conferred_immunity, ['previous_illness']

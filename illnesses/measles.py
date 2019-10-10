@@ -1,6 +1,6 @@
 from typing import Dict
 
-from probable_immunity_web_app.forms.immunity_data_entry_form import current_year
+from .common_helpers import validate_birth_year
 
 """
 CDC Presumptive evidence of immunity: https://www.cdc.gov/vaccines/pubs/surv-manual/chpt07-measles.html
@@ -60,8 +60,7 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
 
     Returns a float probability, and a list of content templates.
 
-    birth_year accepts a four digit positive integer (eg 1000+) up to the
-        current year, but infers equivalent floats eg 1980.0 accepted as 1980.
+    birth_year accepts a four digit positive integer to compare to 1957.
 
     on_time_measles_vaccinations not required -  not supplied or falsey value
         such as None, False, ''
@@ -90,9 +89,10 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
     """
     # Set defaults:
     probability, messages = shots_under_6_immunity[0], ['no_immunisations']
+
     # Enforce integer 4 digit birth year up to current year.
-    if not isinstance(birth_year, int) or not 999 < birth_year <= current_year:
-        raise ValueError(f'Birth year must be a 4 digit integer less than {current_year}.')
+    validate_birth_year(birth_year)
+
     if birth_year < 1957:
         probability, messages = conferred_immunity, ['pre_1957_message']
 
