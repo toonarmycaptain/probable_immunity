@@ -2,8 +2,8 @@ import datetime
 
 from typing import Union
 
-
 current_year: int = datetime.date.today().year  # Returns 4 digit year.
+
 
 def validate_birth_year(birth_year: int) -> Union[int, ValueError]:
     """
