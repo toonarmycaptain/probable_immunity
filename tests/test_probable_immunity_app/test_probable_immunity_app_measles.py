@@ -265,7 +265,7 @@ def test_measles_immunity_results(client, app_specific_illnesses,
         response = test_client.get('http://localhost/immunity/results/', follow_redirects=True)
         assert response.status_code == response_status
         # Use probability of measles immunity to test response content.
-        assert f'{measles_probability}'.encode('utf-8') in response.data
+        assert f'{measles_probability:.2f}'.encode('utf-8') in response.data
 
 
 @pytest.mark.parametrize(

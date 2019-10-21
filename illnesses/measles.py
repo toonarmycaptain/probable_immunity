@@ -43,7 +43,7 @@ through the first 3–4 days of rash.
 https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
 """
 
-conferred_immunity = 0.9
+conferred_immunity = 0.90
 natural_immunity = 0.10
 # shots before 6 years
 shots_under_6_immunity = {
