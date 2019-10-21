@@ -164,6 +164,14 @@ def immunity(birth_year: int,
         probability, templates = conferred_immunity, ['pre_1957_message',
                                                       ]
     elif on_time_mumps_vaccinations:
+        if not (int(on_time_mumps_vaccinations) > 0  # Must be > 0
+                # Must be integer.
+                and (isinstance(on_time_mumps_vaccinations, int)
+                     # Or float equiv to int eg 2.0 = 2
+                     or int(on_time_mumps_vaccinations) == on_time_mumps_vaccinations)):
+            raise ValueError('Mumps vaccinations must be a positive integer.')  # Or zero.
+
+
         if on_time_mumps_vaccinations == 1:
             probability, templates = one_dose_immunity(birth_year), ['has_immunisations',
                                                                      'waning_warning',
