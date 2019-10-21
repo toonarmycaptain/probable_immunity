@@ -1,8 +1,8 @@
 language: python
 
 os:
-    - windows
     - linux
+    - windows
 
 
 cache: pip
@@ -26,7 +26,7 @@ install:
 
 # command to run tests
 script:
-    - pytest --cov --mypy
+    - pytest --cov --mypy -vv
     - coverage xml -i
     - python-codacy-coverage -r coverage.xml
     - codecov
