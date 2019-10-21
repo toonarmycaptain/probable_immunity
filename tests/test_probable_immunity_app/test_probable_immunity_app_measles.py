@@ -206,7 +206,7 @@ def test_immunity_session_contents_measles(app_specific_illnesses,
           },
          200, measles.shots_under_6_immunity[1]),
         # 2 measles shots
-        ({'birth_year': 1957,
+        ({'birth_year': 1956,
           'measles': {'on_time_measles_vaccinations': 2},
           },
          200, measles.conferred_immunity),
