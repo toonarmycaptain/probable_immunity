@@ -4,7 +4,7 @@ from pathlib import Path
 
 from flask import Flask
 
-from .config import ProductionConfig
+from probable_immunity_web_app.config import ProductionConfig
 
 about_text_string = (
     # Primarily for testing, hence binary string.
