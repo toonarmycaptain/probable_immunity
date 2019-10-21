@@ -1,6 +1,10 @@
 <p><b>Measles</b></p>
 <p>
-    Your probability of being immune to measles if exposed is {{measles['probability_of_measles_immunity']}}.<br>
+    Your probability of being immune to measles if exposed is {% if measles['probability_of_measles_immunity'] is not string %}
+                                                                {{ "{:.2f}".format(measles['probability_of_measles_immunity']) }}
+                                                            {% else %}
+                                                                {{ measles['probability_of_measles_immunity'] }}
+                                                            {% endif %}.<br>
     {% if measles['content_templates'][0] != 'immunity_results_error_message' %}
         This means that your probability of contracting measles, if exposed, is {{ "{:.2f}%".format((1-measles['probability_of_measles_immunity'])*100) }}.
         <br>

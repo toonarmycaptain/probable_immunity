@@ -1,26 +1,27 @@
 from flask import (Blueprint,
-                   Flask,
+                   current_app,
                    redirect,
                    request,
                    render_template,
                    session,
                    url_for,
                    )
+from wtforms import FormField
 
 import probable_immunity_web_app.forms.immunity_data_entry_form as forms
 
-from probable_immunity_web_app.illness_config import illnesses
-
-app = Flask(__name__)
-
-# app.secret_key = os.urandom(32)
-
+from probable_immunity_web_app.illness_config import Illnesses
 
 immunity_app_bp = Blueprint('immunity_app', __name__, url_prefix='/')
 
 
 @immunity_app_bp.route('/immunity/', methods=('GET', 'POST'))
 def immunity():
+    illnesses = Illnesses(current_app.config['ILLNESS_LIST'])
+    # Initialise form from config:
+    for illness in illnesses:
+        setattr(forms.ImmunityDataEntryForm, illness.name, FormField(illness.form))
+    # Set form
     form = forms.ImmunityDataEntryForm()
 
     if request.method == 'POST':
@@ -41,6 +42,7 @@ def immunity():
 
 @immunity_app_bp.route('/immunity/results/')
 def immunity_results():
+    illnesses = Illnesses(current_app.config['ILLNESS_LIST'])
     result_data = {}
     for illness in illnesses:
         try:
@@ -58,7 +60,3 @@ def immunity_results():
                            illnesses=illnesses.names,
                            **result_data,  # Dict form {illness: {k, v}, } - (whatever key-value each illness needs}
                            )
-
-
-if __name__ == '__main__':
-    app.run()
