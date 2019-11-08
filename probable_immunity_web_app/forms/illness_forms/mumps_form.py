@@ -19,7 +19,7 @@ class Mumps(FlaskForm):
                 message='Please enter the number of mumps vaccinations by age six, if none, enter 0.'),
         ],
     )
-    mumps_illness = BooleanField(label='Had a case of the measles:',
+    mumps_illness = BooleanField(label='Had a case of the mumps:',
                                  false_values=("False",  # This is needed to use False bool in request tests.
                                                ),
                                  )
