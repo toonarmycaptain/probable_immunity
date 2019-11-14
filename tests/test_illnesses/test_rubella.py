@@ -38,24 +38,24 @@ class TestImmunity:
                                  ({}, {'birth_year': 1956, }, {'probability_of_rubella_immunity': conferred_immunity,
                                                                'content_templates': ['pre_1957_message']}),
                                  ({}, {'birth_year': 1956,
-                                       'on_time_rubella_vaccinations': None, },
+                                       'rubella_vaccinations': None, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['pre_1957_message']}),
                                  # Pre-1957 birth year, number of shots 0 -> >2
                                  ({}, {'birth_year': 1900,
-                                       'on_time_rubella_vaccinations': 0, },
+                                       'rubella_vaccinations': 0, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['pre_1957_message']}),
                                  ({}, {'birth_year': 1956,
-                                       'on_time_rubella_vaccinations': 1, },
+                                       'rubella_vaccinations': 1, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['pre_1957_message']}),
                                  ({}, {'birth_year': 1900,
-                                       'on_time_rubella_vaccinations': 2, },
+                                       'rubella_vaccinations': 2, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['pre_1957_message']}),
                                  ({}, {'birth_year': 1956,
-                                       'on_time_rubella_vaccinations': 3, },
+                                       'rubella_vaccinations': 3, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['pre_1957_message']}),
                                  # Pre-1957 birth year, no shots supplied, previous illness rubella
@@ -77,22 +77,22 @@ class TestImmunity:
                                    'content_templates': ['previous_illness']}),
                                  # Pre-1957 birth year, number of shots 0 -> >2, previous illness rubella
                                  ({}, {'birth_year': 1900,
-                                       'on_time_rubella_vaccinations': 0,
+                                       'rubella_vaccinations': 0,
                                        'rubella_illness': True, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
                                  ({}, {'birth_year': 1956,
-                                       'on_time_rubella_vaccinations': 1,
+                                       'rubella_vaccinations': 1,
                                        'rubella_illness': True, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
                                  ({}, {'birth_year': 1900,
-                                       'on_time_rubella_vaccinations': 2,
+                                       'rubella_vaccinations': 2,
                                        'rubella_illness': True, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
                                  ({}, {'birth_year': 1956,
-                                       'on_time_rubella_vaccinations': 3,
+                                       'rubella_vaccinations': 3,
                                        'rubella_illness': True, },
                                   {'probability_of_rubella_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
@@ -224,7 +224,7 @@ class TestImmunity:
         assert immunity(*args) == returned_dict
 
     @pytest.mark.parametrize('args',
-                             [  # No on_time_rubella_vaccinations arg
+                             [  # No rubella_vaccinations arg
                                  {'birth_year': 'a', },  # String birth_year.
                                  {'birth_year': 1957.6, },  # String birth_year.
                                  {'birth_year': 'c', },  # String for all values.
@@ -235,49 +235,49 @@ class TestImmunity:
                                  # Ensure good session data does not raise error.
                                  pytest.param({'birth_year': 1980}, marks=pytest.mark.xfail),
                                  # 0 shots
-                                 {'birth_year': 'a', 'on_time_rubella_vaccinations': 0, },  # String birth_year.
-                                 {'birth_year': 1957.6, 'on_time_rubella_vaccinations': 0, },  # Float birth_year.
-                                 {'birth_year': 'c', 'on_time_rubella_vaccinations': 0, },  # String for all values.
-                                 {'birth_year': -1989, 'on_time_rubella_vaccinations': 0, },  # Negative birth year
-                                 {'birth_year': 2232, 'on_time_rubella_vaccinations': 0, },  # Too high birth year.
-                                 {'birth_year': 19894, 'on_time_rubella_vaccinations': 0, },  # Too long birth year.
-                                 {'birth_year': 198, 'on_time_rubella_vaccinations': 0, },  # Too low birth year.
+                                 {'birth_year': 'a', 'rubella_vaccinations': 0, },  # String birth_year.
+                                 {'birth_year': 1957.6, 'rubella_vaccinations': 0, },  # Float birth_year.
+                                 {'birth_year': 'c', 'rubella_vaccinations': 0, },  # String for all values.
+                                 {'birth_year': -1989, 'rubella_vaccinations': 0, },  # Negative birth year
+                                 {'birth_year': 2232, 'rubella_vaccinations': 0, },  # Too high birth year.
+                                 {'birth_year': 19894, 'rubella_vaccinations': 0, },  # Too long birth year.
+                                 {'birth_year': 198, 'rubella_vaccinations': 0, },  # Too low birth year.
                                  # Ensure good session data does not raise error.
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 0, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 0, },
                                               marks=pytest.mark.xfail),
 
                                  # 1 shot
-                                 {'birth_year': 'a', 'on_time_rubella_vaccinations': 1, },  # String birth_year.
-                                 {'birth_year': 1957.6, 'on_time_rubella_vaccinations': 1, },  # Float birth_year.
-                                 {'birth_year': 'c', 'on_time_rubella_vaccinations': 1, },  # String for all values.
-                                 {'birth_year': -1989, 'on_time_rubella_vaccinations': 1, },  # Negative birth year
-                                 {'birth_year': 2232, 'on_time_rubella_vaccinations': 1, },  # Too high birth year.
-                                 {'birth_year': 19894, 'on_time_rubella_vaccinations': 1, },  # Too long birth year.
-                                 {'birth_year': 198, 'on_time_rubella_vaccinations': 1, },  # Too low birth year.
+                                 {'birth_year': 'a', 'rubella_vaccinations': 1, },  # String birth_year.
+                                 {'birth_year': 1957.6, 'rubella_vaccinations': 1, },  # Float birth_year.
+                                 {'birth_year': 'c', 'rubella_vaccinations': 1, },  # String for all values.
+                                 {'birth_year': -1989, 'rubella_vaccinations': 1, },  # Negative birth year
+                                 {'birth_year': 2232, 'rubella_vaccinations': 1, },  # Too high birth year.
+                                 {'birth_year': 19894, 'rubella_vaccinations': 1, },  # Too long birth year.
+                                 {'birth_year': 198, 'rubella_vaccinations': 1, },  # Too low birth year.
                                  # Ensure good session data does not raise error.
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 1, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 1, },
                                               marks=pytest.mark.xfail),
                                  # 2 shots
-                                 {'birth_year': 'a', 'on_time_rubella_vaccinations': 2, },  # String birth_year.
-                                 {'birth_year': 1957.6, 'on_time_rubella_vaccinations': 2, },  # Float birth_year.
-                                 {'birth_year': 'c', 'on_time_rubella_vaccinations': 2, },  # String for all values.
-                                 {'birth_year': -1989, 'on_time_rubella_vaccinations': 2, },  # Negative birth year
-                                 {'birth_year': 2232, 'on_time_rubella_vaccinations': 2, },  # Too high birth year.
-                                 {'birth_year': 19894, 'on_time_rubella_vaccinations': 2, },  # Too long birth year.
-                                 {'birth_year': 198, 'on_time_rubella_vaccinations': 2, },  # Too low birth year.
+                                 {'birth_year': 'a', 'rubella_vaccinations': 2, },  # String birth_year.
+                                 {'birth_year': 1957.6, 'rubella_vaccinations': 2, },  # Float birth_year.
+                                 {'birth_year': 'c', 'rubella_vaccinations': 2, },  # String for all values.
+                                 {'birth_year': -1989, 'rubella_vaccinations': 2, },  # Negative birth year
+                                 {'birth_year': 2232, 'rubella_vaccinations': 2, },  # Too high birth year.
+                                 {'birth_year': 19894, 'rubella_vaccinations': 2, },  # Too long birth year.
+                                 {'birth_year': 198, 'rubella_vaccinations': 2, },  # Too low birth year.
                                  # Ensure good session data does not raise error.
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 2, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 2, },
                                               marks=pytest.mark.xfail),
                                  # > 2 shots
-                                 {'birth_year': 'a', 'on_time_rubella_vaccinations': 3, },  # String birth_year.
-                                 {'birth_year': 1957.6, 'on_time_rubella_vaccinations': 7, },  # Float birth_year.
-                                 {'birth_year': 'c', 'on_time_rubella_vaccinations': 12, },  # String for all values.
-                                 {'birth_year': -1989, 'on_time_rubella_vaccinations': 3, },  # Negative birth year
-                                 {'birth_year': 2232, 'on_time_rubella_vaccinations': 7, },  # Too high birth year.
-                                 {'birth_year': 19894, 'on_time_rubella_vaccinations': 12, },  # Too long birth year.
-                                 {'birth_year': 198, 'on_time_rubella_vaccinations': 3, },  # Too low birth year.
+                                 {'birth_year': 'a', 'rubella_vaccinations': 3, },  # String birth_year.
+                                 {'birth_year': 1957.6, 'rubella_vaccinations': 7, },  # Float birth_year.
+                                 {'birth_year': 'c', 'rubella_vaccinations': 12, },  # String for all values.
+                                 {'birth_year': -1989, 'rubella_vaccinations': 3, },  # Negative birth year
+                                 {'birth_year': 2232, 'rubella_vaccinations': 7, },  # Too high birth year.
+                                 {'birth_year': 19894, 'rubella_vaccinations': 12, },  # Too long birth year.
+                                 {'birth_year': 198, 'rubella_vaccinations': 3, },  # Too low birth year.
                                  # Ensure good session data does not raise error.
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 3, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 3, },
                                               marks=pytest.mark.xfail),
                              ])
     def test_immunity_birth_year_raising_error(self, args):
@@ -287,38 +287,38 @@ class TestImmunity:
     @pytest.mark.parametrize('args',
                              [
                                  # 0 shots
-                                 {'birth_year': 1980, 'on_time_rubella_vaccinations': -1, },  # Negative shots.
-                                 {'birth_year': 1980, 'on_time_rubella_vaccinations': 1.5, },  # Float shots.
-                                 {'birth_year': 1980, 'on_time_rubella_vaccinations': 'two', },  # String shots.
+                                 {'birth_year': 1980, 'rubella_vaccinations': -1, },  # Negative shots.
+                                 {'birth_year': 1980, 'rubella_vaccinations': 1.5, },  # Float shots.
+                                 {'birth_year': 1980, 'rubella_vaccinations': 'two', },  # String shots.
                                  # Ensure good session data does not raise error.
                                  # Empty string
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': '', },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': '', },
                                               marks=pytest.mark.xfail),
                                  # None
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': None, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': None, },
                                               marks=pytest.mark.xfail),
                                  # False
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': False, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': False, },
                                               marks=pytest.mark.xfail),
                                  # Ints
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 0, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 0, },
                                               marks=pytest.mark.xfail),
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 1, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 1, },
                                               marks=pytest.mark.xfail),
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 2, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 2, },
                                               marks=pytest.mark.xfail),
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 3, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 3, },
                                               marks=pytest.mark.xfail),  # Float > 2
                                  # Floats
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 0.0, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 0.0, },
                                               marks=pytest.mark.xfail),
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 1.0, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 1.0, },
                                               marks=pytest.mark.xfail),
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 2.0, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 2.0, },
                                               marks=pytest.mark.xfail),
-                                 pytest.param({'birth_year': 1980, 'on_time_rubella_vaccinations': 3.0, },
+                                 pytest.param({'birth_year': 1980, 'rubella_vaccinations': 3.0, },
                                               marks=pytest.mark.xfail),  # Float > 2
                              ])
-    def test_immunity_on_time_rubella_vaccinations_raising_value_error(self, args):
+    def test_immunity_rubella_vaccinations_raising_value_error(self, args):
         with pytest.raises(ValueError):
             immunity(**args)
