@@ -2,6 +2,7 @@ import os
 
 from probable_immunity_web_app.illnesses import (Measles,
                                                  Mumps,
+                                                 Rubella,
                                                  )
 
 
@@ -19,4 +20,8 @@ class ProductionConfig(Config):
     SECRET_KEY = os.urandom(32)
     # DATABASE = Path(Path(app.instance_path), 'probable_immunity_app.sqlite'),  # plan to use PostgreSQL
 
-    ILLNESS_LIST = [Measles, Mumps]
+    ILLNESS_LIST = [
+        Measles,
+        Mumps,
+        Rubella,
+    ]
