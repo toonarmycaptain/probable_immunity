@@ -20,9 +20,9 @@ class Rubella(FlaskForm):
         ],
     )
     rubella_illness = BooleanField(label='Had a case of rubella:',
-                                 false_values=("False",  # This is needed to use False bool in request tests.
-                                               ),
-                                 )
+                                   false_values=("False",  # This is needed to use False bool in request tests.
+                                                 ),
+                                   )
 
 
 def extract_rubella_form_data(form: Type[FlaskForm]) -> dict:
