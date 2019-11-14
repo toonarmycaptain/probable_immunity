@@ -10,3 +10,7 @@ from .measles_form import (Measles,
 from .mumps_form import (Mumps,
                          extract_mumps_form_data,
                          )
+
+from .rubella_form import (Rubella,
+                           extract_rubella_form_data,
+                           )

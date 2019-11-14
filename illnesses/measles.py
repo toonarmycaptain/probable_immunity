@@ -30,17 +30,33 @@ four days after the rash appears."
 https://www.cdc.gov/measles/transmission.html
 
 
-Before a vaccine was available, infection with measles virus was nearly
+"Before a vaccine was available, infection with measles virus was nearly
 universal during childhood, and more than 90% of persons were immune by age 15
 years. Measles is still a common and often fatal disease in developing
 countries. The World Health Organization estimates there were 145,700 deaths
-globally from measles in 2013.
+globally from measles in 2013."
 
-Measles is highly communicable, with greater than 90% secondary attack rates
+"Measles is highly communicable, with greater than 90% secondary attack rates
 among susceptible persons. Measles may be transmitted from 4 days before to 4
 days after rash onset. Maximum communicability occurs from onset of prodrome
-through the first 3–4 days of rash.
+through the first 3–4 days of rash."
+
+"Although the titer of vaccine-induced antibodies is lower than that following
+natural disease, both serologic and epidemiologic evidence indicate that
+vaccine-induced immunity appears to be long-term and probably lifelong in
+most persons. Most vaccinated persons who appear to lose antibody show an
+anamnestic immune response upon revaccination, indicating that they are
+probably still immune. Although revaccination can increase antibody titer in
+some persons, available data indicate that the increased titer may not be
+sustained. Some studies indicate that secondary vaccine failure
+(waning immunity) may occur after successful vaccination, but this appears to 
+occur rarely and to play only a minor role in measles transmission and
+outbreaks." -> Vaccine does not wane.
 https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
+
+
+
+
 """
 
 conferred_immunity = 0.90

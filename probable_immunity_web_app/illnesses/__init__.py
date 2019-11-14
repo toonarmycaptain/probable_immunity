@@ -24,3 +24,4 @@ Illness objects have an API contract requiring them to provide:
 
 from .measles import Measles
 from .mumps import Mumps
+from .rubella import Rubella
