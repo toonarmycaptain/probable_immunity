@@ -37,19 +37,19 @@ Reinfection after vaccination is rare."
  in those who failed to respond to the first dose. Data indicate that almost
  all persons who do not respond to the measles component of the first dose will
  respond to a second dose of MMR. Few data on the immune response to the
- rubella and mumps components of a second dose of MMR are available. However, 
- most persons who do not respond to the rubella or mumps component of the 
- first MMR dose would be expected to respond to the second dose. The second 
- dose is not generally considered a booster dose because a primary immune 
- response to the first dose provides long-term protection. Although a second 
- dose of vaccine may increase antibody titers in some persons who responded 
- to the first dose, available data indicate that these increased antibody 
- titers are not sustained. The combined MMR vaccine is recommended for both 
+ rubella and mumps components of a second dose of MMR are available. However,
+ most persons who do not respond to the rubella or mumps component of the
+ first MMR dose would be expected to respond to the second dose. The second
+ dose is not generally considered a booster dose because a primary immune
+ response to the first dose provides long-term protection. Although a second
+ dose of vaccine may increase antibody titers in some persons who responded
+ to the first dose, available data indicate that these increased antibody
+ titers are not sustained. The combined MMR vaccine is recommended for both
  doses to ensure immunity to all three viruses."
 -https://www.cdc.gov/vaccines/pubs/pinkbook/rubella.html
--> second dose will give immunity for those who did not respond to first dose, 
+-> second dose will give immunity for those who did not respond to first dose,
 but will not confer better or increased likelihood of immunity in those who
-already show some immunity. 
+already show some immunity.
 
 "This recommendation is based on serologic studies which indicate that among
  hospital personnel born before 1957, 5% to 9% had no detectable measles
