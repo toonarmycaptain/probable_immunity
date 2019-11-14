@@ -311,6 +311,16 @@ def test_immunity_session_contents_all_data(client, app_specific_illnesses,
           'rubella': {'rubella_vaccinations': 1, 'rubella_illness': False, },
           },
          200, measles.shots_under_6_immunity[2]),
+        # Throw error to test that no errors test picks up errors.
+        pytest.param({'birth_year': 2011,
+                      'measles': {'on_time_measles_vaccinations': 2},
+                      'mumps': {'on_time_mumps_vaccinations': 'Ni!', 'mumps_illness': True, },
+                      'rubella': {'rubella_vaccinations': 'Given optically', 'rubella_illness': False,
+
+                                  },
+                      },
+                     200, measles.shots_under_6_immunity[2],
+                     marks=pytest.mark.xfail),
     ])
 def test_immunity_results(client, app,
                           request_data,
@@ -328,6 +338,8 @@ def test_immunity_results(client, app,
     assert response.status_code == response_status
     # Use probability of measles immunity to test response content.
     assert f'{measles_probability}'.encode('utf-8') in response.data
+    # Ensure no errors thrown.
+    assert b'Error' not in response.data
 
 
 @pytest.mark.parametrize(
