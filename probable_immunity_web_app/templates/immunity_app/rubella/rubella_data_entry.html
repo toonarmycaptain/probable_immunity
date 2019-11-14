@@ -1,0 +1,22 @@
+<p><b>Rubella</b></p>
+{{ form.rubella.hidden_tag() }}
+<!–– on_time_rubella_vaccinations ––>
+{{ form.rubella.rubella_vaccinations.label }}
+{{ form.rubella.rubella_vaccinations }}
+{% if form.errors.rubella %}
+    {% if form.errors.rubella.rubella_vaccinations %}
+        {% for error in form.errors.rubella.rubella_vaccinations %}
+            <br class=error><strong>Error:</strong> {{ error }}
+        {% endfor %}
+    {% endif %}
+{% endif %}
+<!–– rubella_illness ––>
+{{ form.rubella.rubella_illness.label }}
+{{ form.rubella.rubella_illness }}
+{% if form.errors.rubella %}
+    {% if form.errors.rubella.rubella_illness %}
+        {% for error in form.errors.rubella.rubella_illness %}
+            <br class=error><strong>Error:</strong> {{ error }}
+        {% endfor %}
+    {% endif %}
+{% endif %}
