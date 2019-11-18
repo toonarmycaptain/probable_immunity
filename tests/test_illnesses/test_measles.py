@@ -8,14 +8,14 @@ from illnesses.measles import (conferred_immunity,
 
 class TestImmunity:
     @pytest.mark.parametrize('args, returned_dict',
-                             [  # pre 1957 birth year, no shots supplied
+                             [  # Pre-1957 birth year, no shots supplied
                                  ((1900,), {'probability_of_measles_immunity': conferred_immunity,
                                             'content_templates': ['pre_1957_message']}),
                                  ((1956,), {'probability_of_measles_immunity': conferred_immunity,
                                             'content_templates': ['pre_1957_message']}),
                                  ((1956, None), {'probability_of_measles_immunity': conferred_immunity,
                                                  'content_templates': ['pre_1957_message']}),
-                                 # pre-1957 birth year, number of shots 0 -> >2
+                                 # Pre-1957 birth year, number of shots 0 -> >2
                                  ((1900, 0), {'probability_of_measles_immunity': conferred_immunity,
                                               'content_templates': ['pre_1957_message']}),
                                  ((1956, 1), {'probability_of_measles_immunity': conferred_immunity,

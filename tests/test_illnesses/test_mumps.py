@@ -61,7 +61,7 @@ def test_two_dose_immunity(birth_year, probability_of_immunity):
 class TestImmunity:
     @pytest.mark.parametrize(
         'args, kwargs, returned_dict',
-        [  # pre 1957 birth year, no shots supplied
+        [  # Pre-1957 birth year, no shots supplied
             ((1900,), {'mumps_illness': False},
              {'probability_of_mumps_immunity': conferred_immunity,
               'content_templates': ['pre_1957_message']}),
@@ -70,7 +70,7 @@ class TestImmunity:
               'content_templates': ['pre_1957_message']}),
             ((1956, None, False), {}, {'probability_of_mumps_immunity': conferred_immunity,
                                        'content_templates': ['pre_1957_message']}),
-            # pre-1957 birth year, number of shots 0 -> >2
+            # Pre-1957 birth year, number of shots 0 -> >2
             ((1900, 0, False), {}, {'probability_of_mumps_immunity': conferred_immunity,
                                     'content_templates': ['pre_1957_message']}),
             ((1956, 1, False), {}, {'probability_of_mumps_immunity': conferred_immunity,
@@ -84,7 +84,7 @@ class TestImmunity:
                           'content_templates': ['pre_1957_message']},
                          marks=pytest.mark.xfail),
             # All kwargs
-            # Pre 1957 birth year, no shots supplied
+            # Pre-1957 birth year, no shots supplied
             ({}, {'birth_year': 1900, }, {'probability_of_mumps_immunity': conferred_immunity,
                                           'content_templates': ['pre_1957_message']}),
             ({}, {'birth_year': 1956, }, {'probability_of_mumps_immunity': conferred_immunity,
@@ -141,7 +141,7 @@ class TestImmunity:
         assert immunity(*args, **kwargs) == returned_dict
 
     @pytest.mark.parametrize('args, kwargs, returned_dict',
-                             [  # pre 1957 birth year, no shots supplied
+                             [  # Pre-1957 birth year, no shots supplied
                                  ((1900,), {'mumps_illness': True},
                                   {'probability_of_mumps_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
@@ -151,7 +151,7 @@ class TestImmunity:
                                  ((1956, None, True), {},
                                   {'probability_of_mumps_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
-                                 # pre-1957 birth year, number of shots 0 -> >2
+                                 # Pre-1957 birth year, number of shots 0 -> >2
                                  ((1900, 0, True), {},
                                   {'probability_of_mumps_immunity': conferred_immunity,
                                    'content_templates': ['previous_illness']}),
