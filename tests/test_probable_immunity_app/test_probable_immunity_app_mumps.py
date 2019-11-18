@@ -413,22 +413,22 @@ def test_immunity_session_contents_mumps(app_specific_illnesses,
           'mumps': {'on_time_mumps_vaccinations': 1,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 1.00 for one shot
+         200, mumps.conferred_immunity),
         ({'birth_year': 1958,
           'mumps': {'on_time_mumps_vaccinations': 1,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 1.00 for one shot
+         200, mumps.conferred_immunity),
         ({'birth_year': 1985,
           'mumps': {'on_time_mumps_vaccinations': 1,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 1.00 for one shot
+         200, mumps.conferred_immunity),
         ({'birth_year': 2011,
           'mumps': {'on_time_mumps_vaccinations': 1,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 1.00 for one shot
+         200, mumps.conferred_immunity),
         # 2 mumps shots
         ({'birth_year': 1956,
           'mumps': {'on_time_mumps_vaccinations': 2,
@@ -439,22 +439,22 @@ def test_immunity_session_contents_mumps(app_specific_illnesses,
           'mumps': {'on_time_mumps_vaccinations': 2,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         ({'birth_year': 1958,
           'mumps': {'on_time_mumps_vaccinations': 2,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         ({'birth_year': 1985,
           'mumps': {'on_time_mumps_vaccinations': 2,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         ({'birth_year': 2011,
           'mumps': {'on_time_mumps_vaccinations': 2,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         # >2 shots
         ({'birth_year': 1956,
           'mumps': {'on_time_mumps_vaccinations': 3,
@@ -465,22 +465,22 @@ def test_immunity_session_contents_mumps(app_specific_illnesses,
           'mumps': {'on_time_mumps_vaccinations': 12,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         ({'birth_year': 1958,
           'mumps': {'on_time_mumps_vaccinations': 3,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         ({'birth_year': 1985,
           'mumps': {'on_time_mumps_vaccinations': 7,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
         ({'birth_year': 2011,
           'mumps': {'on_time_mumps_vaccinations': 12,
                     'mumps_illness': True},
           },
-         200, mumps.conferred_immunity),  # 2.00 for two shots
+         200, mumps.conferred_immunity),
 
     ])
 def test_mumps_immunity_results(client, app_specific_illnesses, monkeypatch,
