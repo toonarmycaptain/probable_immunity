@@ -84,7 +84,7 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
     ValueError will be deliberately raised on improper data.
 
 
-    messages:   'pre_1957_message': CDC explanation of assumed immunity due to
+    templates:   'pre_1957_message': CDC explanation of assumed immunity due to
                     exposure before vaccines.
                     ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
@@ -104,13 +104,13 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
     :return: Dict {'probability_of_measles_immunity': float, 'content_templates': List(str)}
     """
     # Set defaults:
-    probability, messages = shots_under_6_immunity[0], ['no_immunisations']
+    probability, templates = shots_under_6_immunity[0], ['no_immunisations']
 
     # Enforce integer 4 digit birth year up to current year.
     validate_birth_year(birth_year)
 
     if birth_year < 1957:
-        probability, messages = conferred_immunity, ['pre_1957_message']
+        probability, templates = conferred_immunity, ['pre_1957_message']
 
     elif on_time_measles_vaccinations:
         if not (int(on_time_measles_vaccinations) > 0  # Must be > 0
@@ -121,11 +121,11 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
             raise ValueError('Measles vaccinations must be a positive integer.')  # Or zero.
 
         if on_time_measles_vaccinations <= 2:
-            probability, messages = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
+            probability, templates = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
         if on_time_measles_vaccinations > 2:
-            probability, messages = shots_under_6_immunity[2], ['has_immunisations',
+            probability, templates = shots_under_6_immunity[2], ['has_immunisations',
                                                                 'greater_than_two_shots_before_age_six_message']
 
-    return {'probability_of_measles_immunity': probability, 'content_templates': messages}
+    return {'probability_of_measles_immunity': probability, 'content_templates': templates}
 
 # need case where shots after age 6
