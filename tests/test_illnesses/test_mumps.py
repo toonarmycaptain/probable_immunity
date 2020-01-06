@@ -232,21 +232,21 @@ class TestImmunity:
                              'content_templates': ['no_immunisations', ]}),
             ((2011, 0), {}, {'probability_of_mumps_immunity': natural_immunity,
                              'content_templates': ['no_immunisations', ]}),
-            # 1 , 'waning_warning',shot
+            # 1 shot, 'waning_warning'
             ((1957, 1), {}, {'probability_of_mumps_immunity': 'one',
                              'content_templates': ['has_immunisations', 'waning_warning', ]}),
             ((1958, 1), {}, {'probability_of_mumps_immunity': 'one',
                              'content_templates': ['has_immunisations', 'waning_warning', ]}),
             ((2011, 1), {}, {'probability_of_mumps_immunity': 'one',
                              'content_templates': ['has_immunisations', 'waning_warning', ]}),
-            # 2 s, 'waning_warning',hots
+            # 2 shots, 'waning_warning'
             ((1957, 2), {}, {'probability_of_mumps_immunity': 'two',
                              'content_templates': ['has_immunisations', 'waning_warning', ]}),
             ((1958, 2), {}, {'probability_of_mumps_immunity': 'two',
                              'content_templates': ['has_immunisations', 'waning_warning', ]}),
             ((2011, 2), {}, {'probability_of_mumps_immunity': 'two',
                              'content_templates': ['has_immunisations', 'waning_warning', ]}),
-            # >2 s, 'waning_warning',hots
+            # >2 shots, 'waning_warning'
             ((1957, 3), {}, {'probability_of_mumps_immunity': 'two', 'content_templates': [
                 'has_immunisations', 'waning_warning',
                 'greater_than_two_shots_before_age_six_message', ]}),
