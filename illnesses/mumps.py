@@ -4,9 +4,8 @@ from typing import (Dict,
                     Union)
 
 from .common_helpers import (current_year,
-                            validate_birth_year,
-                            )
-
+                             validate_birth_year,
+                             )
 
 """
 "MMR vaccine is very safe and effective. The mumps component of the MMR vaccine
@@ -170,7 +169,6 @@ def immunity(birth_year: int,
                      # Or float equiv to int eg 2.0 = 2
                      or int(on_time_mumps_vaccinations) == on_time_mumps_vaccinations)):
             raise ValueError('Mumps vaccinations must be a positive integer.')  # Or zero.
-
 
         if on_time_mumps_vaccinations == 1:
             probability, templates = one_dose_immunity(birth_year), ['has_immunisations',

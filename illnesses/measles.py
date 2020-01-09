@@ -1,4 +1,6 @@
-from typing import Dict
+from typing import (Dict,
+                    List,
+                    Union)
 
 from .common_helpers import validate_birth_year
 
@@ -55,6 +57,29 @@ outbreaks." -> Vaccine does not wane.
 https://www.cdc.gov/vaccines/pubs/pinkbook/meas.html
 
 
+*Use conferred immunity as immunity for reinfection, since pre-1957 immunity
+is based on previous infection/exposure.*
+
+"Does past infection to measles make a person immune?
+Yes. Persons who have had measles in the past have lifelong immunity. Since
+measles can be confused with other infections that cause fever and a rash, a
+person needs a special blood test to be sure they are immune. "
+https://www.bphc.org/whatwedo/infectious-diseases/Infectious-Diseases-A-to-Z/Pages/Measles.aspx
+
+"CDC considers you protected from measles if you have written documentation
+(records) showing at least one of the following:
+
+You received two doses of measles-containing vaccine, and you are a(n) —
+school-aged child (grades K-12)
+adult who will be in a setting that poses a high risk for measles transmission,
+including students at post-high school education institutions, healthcare
+personnel, and international travelers.
+You received one dose of measles-containing vaccine, and you are a(n) —
+preschool-aged child
+adult who will not be in a high-risk setting for measles transmission.
+A laboratory confirmed that you had measles at some point in your life.
+A laboratory confirmed that you are immune to measles."
+cdc.gov/measles/about/faqs.html
 
 
 """
@@ -69,10 +94,12 @@ shots_under_6_immunity = {
 }
 
 
-def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
+def immunity(birth_year: int,
+             on_time_measles_vaccinations: int = None,
+             measles_illness: bool = False) -> Dict[str, Union[float, List[str]]]:
     """
-    Takes year of birth, number of shots before age 6, and provides an
-    estimated probability of being immune to measles if exposed.
+    Takes year of birth, number of shots before age 6, previous illness and
+    provides an estimated probability of being immune to measles if exposed.
 
     Returns a float probability, and a list of content templates.
 
@@ -84,7 +111,7 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
     ValueError will be deliberately raised on improper data.
 
 
-    messages:   'pre_1957_message': CDC explanation of assumed immunity due to
+    templates:   'pre_1957_message': CDC explanation of assumed immunity due to
                     exposure before vaccines.
                     ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
@@ -97,20 +124,28 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
 
                 'no_immunisations': Unlikely to have any immunity.
 
+                'previous_illness': Documented previous illness, likely immune.
+
 
     :param birth_year: int
     :param on_time_measles_vaccinations: int or None
+    :param measles_illness: bool
     :raises: ValueError On improper valued data.
     :return: Dict {'probability_of_measles_immunity': float, 'content_templates': List(str)}
     """
     # Set defaults:
-    probability, messages = shots_under_6_immunity[0], ['no_immunisations']
+    probability, templates = shots_under_6_immunity[0], ['no_immunisations']
 
     # Enforce integer 4 digit birth year up to current year.
     validate_birth_year(birth_year)
 
-    if birth_year < 1957:
-        probability, messages = conferred_immunity, ['pre_1957_message']
+    if measles_illness:
+        # Presume immunity from infection similar to pre-1957 immunity,
+        # since pre-1957 immunity is presumed based on exposure/infection.
+        probability, templates = conferred_immunity, ['previous_illness']
+
+    elif birth_year < 1957:
+        probability, templates = conferred_immunity, ['pre_1957_message']
 
     elif on_time_measles_vaccinations:
         if not (int(on_time_measles_vaccinations) > 0  # Must be > 0
@@ -121,11 +156,11 @@ def immunity(birth_year: int, on_time_measles_vaccinations: int = None) -> Dict:
             raise ValueError('Measles vaccinations must be a positive integer.')  # Or zero.
 
         if on_time_measles_vaccinations <= 2:
-            probability, messages = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
+            probability, templates = shots_under_6_immunity[on_time_measles_vaccinations], ['has_immunisations']
         if on_time_measles_vaccinations > 2:
-            probability, messages = shots_under_6_immunity[2], ['has_immunisations',
-                                                                'greater_than_two_shots_before_age_six_message']
+            probability, templates = shots_under_6_immunity[2], ['has_immunisations',
+                                                                 'greater_than_two_shots_before_age_six_message']
 
-    return {'probability_of_measles_immunity': probability, 'content_templates': messages}
+    return {'probability_of_measles_immunity': probability, 'content_templates': templates}
 
 # need case where shots after age 6

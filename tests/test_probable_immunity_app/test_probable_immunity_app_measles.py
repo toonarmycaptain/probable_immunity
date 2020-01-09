@@ -1,3 +1,17 @@
+"""
+Test immunity app measles illness.
+
+
+NB Since measles_illness is a checkbox, it is difficult to send invalid data, and
+hence isn't always tested, or the value is omitted.
+
+Generally, any value submitted for a checkbox indicates True - that is, the box
+has been checked, otherwise no value is sent to the server. In this case, False
+has been set as a possible False value for the form to accept, for some testing
+purposes, but for some purposes (eg in validation, error throwing checks), this
+behaviour means it can be omitted, meaning less test cases.
+
+"""
 import flask
 import pytest
 
@@ -12,7 +26,8 @@ from tests.request_generator_helpers import flatten_dict
 def test_immunity_measles(client, app_specific_illnesses):
     """Test response and redirect on good data."""
     request_data = {'birth_year': 1985,
-                    'measles': {'on_time_measles_vaccinations': 1},
+                    'measles': {'on_time_measles_vaccinations': 1,
+                                'measles_illness': False},
                     }
 
     app = app_specific_illnesses(illnesses=[Measles])
@@ -61,6 +76,42 @@ def test_immunity_measles(client, app_specific_illnesses):
          (b'Number of measles vaccinations by age six must be an integer',
           b'Error',),
          ),
+        # With measles_illness set:
+        ({'birth_year': 2001,
+          'measles': {'on_time_measles_vaccinations': '',
+                      'measles_illness': True},  # No data.
+          },
+         (b'Please enter the number of measles vaccinations by age six, if none, enter 0.',
+          b'Error',),
+         ),
+        ({'birth_year': 2001,
+          'measles': {'on_time_measles_vaccinations': 'test text entry',
+                      'measles_illness': True},  # String.
+          },
+         (b'Number of measles vaccinations by age six must be an integer',
+          b'Error',),
+         ),
+        ({'birth_year': 2001,
+          'measles': {'on_time_measles_vaccinations': None,
+                      'measles_illness': True},  # Test None/non str or int entry.
+          },
+         (b'Please enter the number of measles vaccinations by age six',
+          b'Error',),
+         ),
+        ({'birth_year': 2001,
+          'measles': {'on_time_measles_vaccinations': 1.5,
+                      'measles_illness': True},  # Test float.
+          },
+         (b'Number of measles vaccinations by age six must be an integer',
+          b'Error',),
+         ),
+        ({'birth_year': 2001,
+          'measles': {'on_time_measles_vaccinations': -2,
+                      'measles_illness': True},  # Test negative.
+          },
+         (b'Number of measles vaccinations by age six must be an integer',
+          b'Error',),
+         ),
         pytest.param({'birth_year': 2001,
                       'measles': {'on_time_measles_vaccinations': 2},
                       },
@@ -72,6 +123,12 @@ def test_immunity_measles(client, app_specific_illnesses):
                      (b'Birth year must be a 4 digit integer less than',
                       b'Error',),
                      marks=pytest.mark.xfail),  # Zero should not error.
+        # measles_illness_errors: Difficult to send invalid data:
+        # Generally, any value submitted for a checkbox indicates True - that
+        # is, box has been checked, otherwise no value is sent to the server.
+        # In this case, False has been set as a possible False value for the
+        # form to accept, for testing purposes.
+
         # Test multiple errors:
         ({'birth_year': 'test text entry for both',
           'measles': {'on_time_measles_vaccinations': 'and both errors flashed'},
@@ -102,46 +159,115 @@ def test_immunity_validate_measles_input(client, app_specific_illnesses,
     'request_data',
     [  # 0 shots
         ({'birth_year': 1956,
-          'measles': {'on_time_measles_vaccinations': 0},
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': False},
           }),
         ({'birth_year': 1957,
-          'measles': {'on_time_measles_vaccinations': 0},
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': False},
           }),
         ({'birth_year': 1958,
-          'measles': {'on_time_measles_vaccinations': 0},
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': False},
           }),
         ({'birth_year': 2011,
-          'measles': {'on_time_measles_vaccinations': 0},
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': False},
           }),
         # 1 shot
         ({'birth_year': 1957,
-          'measles': {'on_time_measles_vaccinations': 1},
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': False},
           }),
         ({'birth_year': 1958,
-          'measles': {'on_time_measles_vaccinations': 1},
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': False},
           }),
         ({'birth_year': 2011,
-          'measles': {'on_time_measles_vaccinations': 1},
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': False},
           }),
         # 2 shots
         ({'birth_year': 1957,
-          'measles': {'on_time_measles_vaccinations': 2},
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': False},
           }),
         ({'birth_year': 1958,
-          'measles': {'on_time_measles_vaccinations': 2},
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': False},
           }),
         ({'birth_year': 2011,
-          'measles': {'on_time_measles_vaccinations': 2},
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': False},
           }),
         # >2 shots
         ({'birth_year': 1957,
-          'measles': {'on_time_measles_vaccinations': 3},
+          'measles': {'on_time_measles_vaccinations': 3,
+                      'measles_illness': False},
           }),
         ({'birth_year': 1958,
-          'measles': {'on_time_measles_vaccinations': 7},
+          'measles': {'on_time_measles_vaccinations': 7,
+                      'measles_illness': False},
           }),
         ({'birth_year': 2011,
-          'measles': {'on_time_measles_vaccinations': 12},
+          'measles': {'on_time_measles_vaccinations': 12,
+                      'measles_illness': False},
+          }),
+        # Measles illness True
+        ({'birth_year': 1956,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True}
+          }),
+        # 1 shot
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True}
+          }),
+        # 2 shots
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True}
+          }),
+        # >2 shots
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 3,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 7,
+                      'measles_illness': True}
+          }),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 12,
+                      'measles_illness': True}
           }),
     ])
 def test_immunity_session_contents_measles(app_specific_illnesses,
@@ -158,7 +284,9 @@ def test_immunity_session_contents_measles(app_specific_illnesses,
 
         assert flask.session['birth_year'] == int(request_data['birth_year'])
         assert flask.session['measles'] == {
-            'on_time_measles_vaccinations': int(request_data['measles']['on_time_measles_vaccinations'])}
+            'on_time_measles_vaccinations': int(request_data['measles']['on_time_measles_vaccinations']),
+            'measles_illness': request_data['measles']['measles_illness'],
+        }
 
         # Ensure successful redirect to results in response.
         assert 'http://localhost/immunity/results/' == response.headers['Location']
@@ -247,7 +375,106 @@ def test_immunity_session_contents_measles(app_specific_illnesses,
           'measles': {'on_time_measles_vaccinations': 12},
           },
          200, measles.shots_under_6_immunity[2]),
-
+        # measles_illness: True
+        # 0 measles shots.
+        ({'birth_year': 1956,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 0,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        # 1 measles shot.
+        ({'birth_year': 1956,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1985,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 1,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        # 2 measles shots
+        ({'birth_year': 1956,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1985,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 2,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        # >2 shots
+        ({'birth_year': 1956,
+          'measles': {'on_time_measles_vaccinations': 3,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1957,
+          'measles': {'on_time_measles_vaccinations': 12,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1958,
+          'measles': {'on_time_measles_vaccinations': 3,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 1985,
+          'measles': {'on_time_measles_vaccinations': 7,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
+        ({'birth_year': 2011,
+          'measles': {'on_time_measles_vaccinations': 12,
+                      'measles_illness': True},
+          },
+         200, measles.conferred_immunity),
     ])
 def test_measles_immunity_results(client, app_specific_illnesses,
                                   request_data,

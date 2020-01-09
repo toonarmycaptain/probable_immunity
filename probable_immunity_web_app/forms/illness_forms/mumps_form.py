@@ -1,4 +1,4 @@
-"""Measles data entry form."""
+"""Mumps data entry form."""
 from typing import Type
 
 from flask_wtf import FlaskForm

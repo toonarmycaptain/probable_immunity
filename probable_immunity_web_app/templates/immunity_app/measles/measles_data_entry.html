@@ -10,3 +10,13 @@
         {% endfor %}
     {% endif %}
 {% endif %}
+<!–– measles_illness ––>
+{{ form.measles.measles_illness.label }}
+{{ form.measles.measles_illness }}
+{% if form.errors.measles %}
+    {% if form.errors.measles.measles_illness %}
+        {% for error in form.errors.measles.measles_illness %}
+            <br class=error><strong>Error:</strong> {{ error }}
+        {% endfor %}
+    {% endif %}
+{% endif %}

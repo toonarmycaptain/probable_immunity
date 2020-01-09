@@ -2,7 +2,7 @@
 from typing import Type
 
 from flask_wtf import FlaskForm
-from wtforms import validators
+from wtforms import validators, BooleanField
 from wtforms.fields.html5 import IntegerField
 
 
@@ -19,7 +19,12 @@ class Measles(FlaskForm):
                 message='Please enter the number of measles vaccinations by age six, if none, enter 0.'),
         ],
     )
+    measles_illness = BooleanField(label='Had a case of measles:',
+                                   false_values=("False",  # This is needed to use False bool in request tests.
+                                                 ),
+                                   )
 
 
 def extract_measles_form_data(form: Type[FlaskForm]) -> dict:
-    return {'on_time_measles_vaccinations': int(form.measles.on_time_measles_vaccinations.data)}
+    return {'on_time_measles_vaccinations': int(form.measles.on_time_measles_vaccinations.data),
+            'measles_illness': form.measles.measles_illness.data}
