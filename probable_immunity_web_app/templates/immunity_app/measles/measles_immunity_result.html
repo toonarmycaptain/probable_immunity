@@ -21,5 +21,7 @@
                 {% include content_template %}
             {% endif %}
     {% endfor %}
-    <p>This presumes you haven't had the measles. If you've had measles, you are likely immune*.</p>
+    {% if 'previous_illness' not in measles['content_templates'] %}
+        <p>This presumes you haven't had the measles. If you've had measles, you are likely immune*.</p>
+    {% endif %}
 </p>
