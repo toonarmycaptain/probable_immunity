@@ -41,32 +41,6 @@ https://stm.sciencemag.org/content/10/433/eaao5945.full
 https://www.immunize.org/catg.d/p4211.pdf
 """
 
-mumps_templates = {
-    'pre_1957_message': ("According to the CDC, you are likely immune to mumps due to "
-                         "childhood exposure.<br>"
-
-                         "NB: \"Birth before 1957 provides only "
-                         "presumptive evidence for measles, mumps, and rubella. Before "
-                         "vaccines were available, nearly everyone was infected with "
-                         "measles, mumps, and rubella viruses during childhood. The "
-                         "majority of people born before 1957 are likely to have been "
-                         "infected naturally and therefore are presumed to be protected "
-                         "against measles, mumps, and rubella. Healthcare personnel born "
-                         "before 1957 without laboratory evidence of immunity or disease "
-                         "should consider getting two doses of MMR vaccine.\" "
-                         "- <a href='https://www.cdc.gov/vaccines/vpd/mmr/public/index.html'>"
-                         "CDC - Measles, Mumps, and Rubella (MMR) Vaccination: What Everyone Should Know</a>"),
-    'has_immunisations': ("This means you have a statistical probability of being immune "
-                          "to mumps if you are exposed. The closer to 1.0, the more "
-                          "likely you are immune."),  # TODO make better message
-    'greater_than_two_shots_before_age_six_message': ("Data not available for more than 2 "
-                                                      "shots before age 6."),
-    'no_immunisations': ("You are unlikely to have any immunity to mumps, if you are "
-                         "exposed, you are very likely to be infected."),
-    'waning_warning': ("Note about efficacy decreasing over time, differing takeup by "
-                       "immune system"),
-}
-
 """
 regression_data_1_dose = {
     # Years after age 6: probability of immunity
@@ -145,9 +119,37 @@ def immunity(birth_year: int,
     Takes year of birth, number of shots before age 6, previous illness, and
     provides an estimated probability of being immune to mumps if exposed.
 
+    Returns a float probability, and a list of content templates.
+
+    birth_year accepts a four digit positive integer to compare to 1957.
+
+    on_time_mumps_vaccinations not required -  not supplied or falsey value
+        such as None, False, ''
+
+    ValueError will be deliberately raised on improper data.
+
+    templates:  'pre_1957_message': CDC explanation of assumed immunity due to
+                    exposure before vaccines.
+                    ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
+
+                'has_immunisations': Correct immunisations.
+
+                'greater_than_two_shots_before_age_six_message': Note about
+                    data being unavailable for more than 2 shots before age 6,
+                    but likely immune.
+
+                'no_immunisations': Unlikely to have any immunity.
+
+                'previous_illness': Documented previous illness, likely immune.
+
+                'waning_warning': Note about efficacy decreasing over time,
+                    differing takeup by immune system"),
+
+
     :param birth_year: int
     :param on_time_mumps_vaccinations: int or None
     :param mumps_illness: bool
+    :raises: ValueError On improper valued data.
     :return: Dict {'probability_of_mumps_immunity': float, 'content_templates': List[str]}
     """
     # Set defaults:

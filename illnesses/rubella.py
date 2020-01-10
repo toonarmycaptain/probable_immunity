@@ -82,13 +82,15 @@ def immunity(birth_year: int,
     ValueError will be deliberately raised on improper data.
 
 
-    templates:   'pre_1957_message': CDC explanation of assumed immunity due to
+    templates:  'pre_1957_message': CDC explanation of assumed immunity due to
                     exposure before vaccines.
                     ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
                 'has_immunisations': Correct immunisations.
 
                 'no_immunisations': Unlikely to have any immunity.
+
+                'previous_illness': Documented previous illness, likely immune.
 
     As compared to measles and mumps in the MMR combo, rubella immunity does
     not wane with time, and has good data available for late vaccination and

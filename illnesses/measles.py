@@ -111,7 +111,7 @@ def immunity(birth_year: int,
     ValueError will be deliberately raised on improper data.
 
 
-    templates:   'pre_1957_message': CDC explanation of assumed immunity due to
+    templates:  'pre_1957_message': CDC explanation of assumed immunity due to
                     exposure before vaccines.
                     ref: https://www.cdc.gov/vaccines/vpd/mmr/public/index.html
 
@@ -120,7 +120,6 @@ def immunity(birth_year: int,
                 'greater_than_two_shots_before_age_six_message': Note about
                     data being unavailable for more than 2 shots before age 6,
                     but likely immune.
-                    requirements, likely immune.
 
                 'no_immunisations': Unlikely to have any immunity.
 
