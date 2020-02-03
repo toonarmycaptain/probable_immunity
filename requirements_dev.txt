@@ -1,10 +1,10 @@
-pytest==5.2.2
-pytest-mypy==0.4.1
+pytest==5.3.5
+pytest-mypy==0.4.2
 
 # Running tests on Travis
 codacy-coverage==1.3.11
 codecov==2.0.15
-coverage==4.5.4
-coveralls==1.8.2
-mypy==0.740
+coverage==5.0.3
+coveralls==1.10.0
+mypy==0.761
 pytest-cov==2.8.1
