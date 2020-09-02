@@ -8,7 +8,6 @@ from wtforms import (SubmitField,
                      )
 from wtforms.fields.html5 import IntegerField
 
-
 from probable_immunity_web_app.forms import custom_validators
 
 current_year: int = datetime.date.today().year  # Returns 4 digit year.
@@ -23,7 +22,7 @@ class ImmunityDataEntryForm(FlaskForm):
                 max_year=current_year,
                 message=f'Birth year must be a 4 digit integer less than {current_year}.'),
             validators.InputRequired(message='Birth year required.'),
-        ],
-    )
+            ],
+        )
 
     submit = SubmitField('Submit')
