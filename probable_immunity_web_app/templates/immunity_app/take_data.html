@@ -11,7 +11,7 @@
     <!-- Common data -->
         <!-- birth_year -->
         {{ form.birth_year.label }}<br>
-        {{ form.birth_year(size=32) }}
+        {{ form.birth_year }}
         {% if form.errors.birth_year %}
             {% for error in form.errors.birth_year %}
                  <br class=error><strong>Error:</strong> {{ error }}
