@@ -9,7 +9,6 @@
   <form method="post">
     {{ form.hidden_tag() }}
     <!-- Common data -->
-    <p>
         <!-- birth_year -->
         {{ form.birth_year.label }}<br>
         {{ form.birth_year(size=32) }}
@@ -27,6 +26,6 @@
             {% include illness_template ignore missing%}
         {% endfor %}
         <br>{{ form.submit }}
-    </p>
   </form>
+
 {% endblock %}
