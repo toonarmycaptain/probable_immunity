@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block content %}
-    <body>
     {% for illness in illnesses %}
         {% set illness_result_template = 'immunity_app/'
                                         + illness + '/'
@@ -19,5 +18,4 @@
         <a href="{{ url_for('immunity_app.immunity') }}" title="Back to data entry.">Get another estimate of
             immunity.</a>
     </p>
-    </body>
 {% endblock %}
