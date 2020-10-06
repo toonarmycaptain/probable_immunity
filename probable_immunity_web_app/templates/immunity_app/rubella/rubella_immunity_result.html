@@ -2,7 +2,7 @@
 <p>
     Your probability of being immune to rubella if exposed is {% if rubella['probability_of_rubella_immunity'] is not string %}
                                                                 {{ "{:.2f}".format(rubella['probability_of_rubella_immunity']) }}
-                                                            {% else %}
+                                                            {%- else %}
                                                                 {{ rubella['probability_of_rubella_immunity'] }}
                                                             {% endif %}.<br>
     {% if rubella['content_templates'][0] != 'immunity_results_error_message' %}

@@ -2,7 +2,7 @@
 <p>
     Your probability of being immune to measles if exposed is {% if measles['probability_of_measles_immunity'] is not string %}
                                                                 {{ "{:.2f}".format(measles['probability_of_measles_immunity']) }}
-                                                            {% else %}
+                                                            {%- else %}
                                                                 {{ measles['probability_of_measles_immunity'] }}
                                                             {% endif %}.<br>
     {% if measles['content_templates'][0] != 'immunity_results_error_message' %}
