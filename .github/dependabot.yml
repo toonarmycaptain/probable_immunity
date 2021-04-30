@@ -7,17 +7,3 @@ updates:
     time: "11:00"
   open-pull-requests-limit: 10
   target-branch: development
-  ignore:
-  - dependency-name: coverage
-    versions:
-    - "5.4"
-    - "5.5"
-  - dependency-name: pytest-cov
-    versions:
-    - 2.11.1
-  - dependency-name: mypy
-    versions:
-    - "0.800"
-  - dependency-name: pytest
-    versions:
-    - 6.2.2
