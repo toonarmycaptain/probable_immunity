@@ -3,7 +3,7 @@ from typing import Type
 
 from flask_wtf import FlaskForm
 from wtforms import validators, BooleanField
-from wtforms.fields.html5 import IntegerField
+from wtforms import IntegerField
 
 
 class Mumps(FlaskForm):

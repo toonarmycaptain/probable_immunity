@@ -6,7 +6,7 @@ from flask_wtf import FlaskForm
 from wtforms import (SubmitField,
                      validators,
                      )
-from wtforms.fields.html5 import IntegerField
+from wtforms import IntegerField
 
 from probable_immunity_web_app.forms import custom_validators
 
