@@ -1,2 +1,2 @@
 flask==2.0.2
-flask-wtf==0.15.1
+flask-wtf==1.0.0
