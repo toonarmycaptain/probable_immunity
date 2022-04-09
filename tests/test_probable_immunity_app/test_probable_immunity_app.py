@@ -60,10 +60,6 @@ def test_immunity_without_trailing_forward_slash_redirects(client, app):
          (b'Birth year required.',
           b'Error',),
          ),
-        ({'birth_year': None, },  # Test None/non str or int entry.
-         (b'Birth year required.',
-          b'Error',),
-         ),
         ({'birth_year': 1992.3, },  # Test float.
          (b'Not a valid integer value',
           b'Error',),
