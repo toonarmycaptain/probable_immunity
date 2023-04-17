@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Optional, Type
 
 from flask_wtf import FlaskForm
 from wtforms import ValidationError
@@ -23,8 +23,8 @@ class Year(object):
 
     """
 
-    def __init__(self, min_year: int = None,
-                 max_year: int = None,
+    def __init__(self, min_year: Optional[int] = None,
+                 max_year: Optional[int] = None,
                  digits: int = 4,
                  message=None,
                  ):

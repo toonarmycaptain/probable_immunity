@@ -1,4 +1,4 @@
-from typing import Dict, Union, List
+from typing import Optional, Dict, Union, List
 
 from .common_helpers import validate_birth_year
 
@@ -66,7 +66,7 @@ vaccinated_immunity = 0.97
 
 
 def immunity(birth_year: int,
-             rubella_vaccinations: int = None,
+             rubella_vaccinations: Optional[int] = None,
              rubella_illness: bool = False) -> Dict[str, Union[float, List[str]]]:
     """
     Takes year of birth, number of shots before age 6, and provides an

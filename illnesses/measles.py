@@ -1,4 +1,4 @@
-from typing import (Dict,
+from typing import (Optional, Dict,
                     List,
                     Union)
 
@@ -95,7 +95,7 @@ shots_under_6_immunity = {
 
 
 def immunity(birth_year: int,
-             on_time_measles_vaccinations: int = None,
+             on_time_measles_vaccinations: Optional[int] = None,
              measles_illness: bool = False) -> Dict[str, Union[float, List[str]]]:
     """
     Takes year of birth, number of shots before age 6, previous illness and
