@@ -1,5 +1,5 @@
 from math import e
-from typing import (Dict,
+from typing import (Optional, Dict,
                     List,
                     Union)
 
@@ -113,7 +113,7 @@ def two_dose_immunity(birth_year: int) -> float:
 
 
 def immunity(birth_year: int,
-             on_time_mumps_vaccinations: int = None,
+             on_time_mumps_vaccinations: Optional[int] = None,
              mumps_illness: bool = False) -> Dict[str, Union[float, List[str]]]:
     """
     Takes year of birth, number of shots before age 6, previous illness, and
