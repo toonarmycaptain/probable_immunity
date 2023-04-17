@@ -11,7 +11,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.10", "3.11"]
         experimental: [false]  # These versions must pass.
 
 #         include:
@@ -47,7 +47,7 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install -r requirements.txt
         python -m pip install -r requirements_dev.txt
-        
+
     - name: Test with pytest --cov=./ --mypy -vv
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -55,7 +55,7 @@ jobs:
         pytest --cov=./ --mypy -vv
         coverage xml -i
         coveralls --service=github
-        
+
     - name: Codacy Coverage Reporter
       uses: codacy/codacy-coverage-reporter-action@0.2.0
       if: matrix.os == 'ubuntu_latest'
