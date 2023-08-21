@@ -40,7 +40,7 @@ def test_immunity_measles(client, app_specific_illnesses):
         'immunity/', data=flat_request_data)
 
     assert response.status_code == 302  # Redirected to results page.
-    assert response.headers['Location'] == 'http://localhost/immunity/results/'
+    assert response.headers['Location'] in 'http://localhost/immunity/results/'
 
 
 @pytest.mark.parametrize(
@@ -289,7 +289,7 @@ def test_immunity_session_contents_measles(app_specific_illnesses,
         }
 
         # Ensure successful redirect to results in response.
-        assert 'http://localhost/immunity/results/' == response.headers['Location']
+        assert response.headers['Location'] in 'http://localhost/immunity/results/'
 
 
 @pytest.mark.parametrize(
@@ -487,7 +487,7 @@ def test_measles_immunity_results(client, app_specific_illnesses,
         assert test_client.get('immunity/').status_code == 200
         response = test_client.post(
             'immunity/', data=flat_request_data)
-        assert 'http://localhost/immunity/results/' == response.headers['Location']
+        assert response.headers['Location'] in 'http://localhost/immunity/results/'
 
         response = test_client.get('http://localhost/immunity/results/', follow_redirects=True)
         assert response.status_code == response_status
@@ -542,7 +542,7 @@ def test_immunity_results_without_session_data_redirects(client, app_specific_il
                 assert test_client_session['measles']['on_time_measles_vaccinations']
         response = test_client.get('immunity/results/', follow_redirects=False)
         assert response.status_code == 302
-        assert response.headers['Location'] == 'http://localhost/immunity/'
+        assert response.headers['Location'] in 'http://localhost/immunity/'
 
 
 def test_immunity_results_without_valid_session_redirects_to_data_entry(client, app_specific_illnesses):

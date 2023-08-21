@@ -2,8 +2,8 @@
 <p>
     Your probability of being immune to mumps if exposed is {% if mumps['probability_of_mumps_immunity'] is not string %}
                                                                 {{ "{:.2f}".format(mumps['probability_of_mumps_immunity']) }}
-                                                            {% else %}
-                                                                {{ mumps['probability_of_mumps_immunity'] }}
+                                                            {%- else %} {#Minus sign to remove whitespace.#}
+                                                                {{ mumps['probability_of_mumps_immunity'] -}}
                                                             {% endif %}.<br>
     {% if mumps['content_templates'][0] != 'immunity_results_error_message' %}
         This means that your probability of contracting mumps, if exposed, is {{ "{:.2f}%".format((1-mumps['probability_of_mumps_immunity'])*100) }}.

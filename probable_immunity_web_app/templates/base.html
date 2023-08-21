@@ -1,16 +1,20 @@
 <!doctype html>
-<title>Probable immunity - {% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<nav>
-  <h1>Probable immunity</h1>
-
-</nav>
-<section class="content">
-  <header>
-    {% block header %}{% endblock %}
-  </header>
-  {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-  {% endfor %}
-  {% block content %}{% endblock %}
-</section>
+<html lang="en">
+  <head>
+    {% block head %}
+      <title>
+        Probable immunity - {% block title %}{% endblock %}
+      </title>
+      <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"/>
+    {% endblock %}
+  </head>
+  <body>
+    <nav>
+      <h1>Probable immunity</h1>
+    </nav>
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+  {% block body %}{% endblock %}
+  </body>
+</html>

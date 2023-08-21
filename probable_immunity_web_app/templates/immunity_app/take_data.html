@@ -1,18 +1,18 @@
 {% extends 'base.html' %}
 
 {% block header %}
-  <h1>{% block title %}Enter data{% endblock %}</h1>
+  {% block title %}Enter data{% endblock %}
 {% endblock %}
 
-{% block content %}
+{% block body %}
+  <h1>Enter data:</h1>
 
   <form method="post">
     {{ form.hidden_tag() }}
     <!-- Common data -->
-    <p>
         <!-- birth_year -->
         {{ form.birth_year.label }}<br>
-        {{ form.birth_year(size=32) }}
+        {{ form.birth_year }}
         {% if form.errors.birth_year %}
             {% for error in form.errors.birth_year %}
                  <br class=error><strong>Error:</strong> {{ error }}
@@ -27,6 +27,5 @@
             {% include illness_template ignore missing%}
         {% endfor %}
         <br>{{ form.submit }}
-    </p>
   </form>
 {% endblock %}

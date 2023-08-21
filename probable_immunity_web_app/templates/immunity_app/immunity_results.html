@@ -1,23 +1,19 @@
 {% extends 'base.html' %}
 
-{% block header %}
-    <h1>{% block title %}Immunity results:{% endblock %}</h1>
+{% block title %}Immunity results{% endblock %}
 
-{% endblock %}
+{% block body %}
+  <h1>Immunity results:</h1>
 
-{% block content %}
-    <body>
-    {% for illness in illnesses %}
-        {% set illness_result_template = 'immunity_app/'
-                                        + illness + '/'
-                                        + illness + '_immunity_result.html' %}
-        {% include illness_result_template %}
+  {% for illness in illnesses %}
+    {% set illness_result_template = 'immunity_app/'
+                                    + illness + '/'
+                                    + illness + '_immunity_result.html' %}
+    {% include illness_result_template %}
+  {% endfor %}.
 
-    {% endfor %}.
-
-    <p align="right">
-        <a href="{{ url_for('immunity_app.immunity') }}" title="Back to data entry.">Get another estimate of
-            immunity.</a>
-    </p>
-    </body>
+  <p class="back">
+    <a href="{{ url_for('immunity_app.immunity') }}" title="Back to data entry.">Get another estimate of
+      immunity.</a>
+  </p>
 {% endblock %}
