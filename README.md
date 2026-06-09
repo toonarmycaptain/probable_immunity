@@ -1,4 +1,4 @@
-## Probable immunity
+# Probable immunity
 
 Website showing user possible chance of immunity to various illnesses and risk of contracting those illnesses following exposure.
 
@@ -20,3 +20,5 @@ Leave a comment or [raise an issue](https://github.com/toonarmycaptain/probable_
 Contributions welcome! Please PR against [development](https://github.com/toonarmycaptain/probable_immunity/tree/development), thankyou!
 
 ##### NB: Not medical advice, not a substitute for medical advice, merely an amateur interpretation of some available data, no guarantees or claim of accuracy given. 
+
+## This project is largely abandoned. 
